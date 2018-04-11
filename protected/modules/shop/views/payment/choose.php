@@ -29,7 +29,7 @@ $cartStatistics = Shop::getPriceTotal();
                 <div class="discount-code">
                     <div class="checkbox-container">
                         <input type="checkbox" id="has-discount" data-toggle="collapse" data-target="#discount-code-form">
-                        <label for="has-discount">کد تخفیف کتابیک دارم</label>
+                        <label for="has-discount">کد تخفیف کتابرسان دارم</label>
                     </div>
                     <div id="discount-code-form" class="collapse">
                         <div class="pull-right">لطفا کد تخفیف خود را وارد کنید.</div>

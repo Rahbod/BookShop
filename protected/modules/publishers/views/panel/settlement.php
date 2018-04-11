@@ -38,7 +38,7 @@ Yii::app()->clientScript->registerScript('account-type','
         ));
     ?>
     <h3>تسویه حساب</h3>
-    <p class="description">می توانید ماهیانه با کتابیک تسویه حساب کنید.</p>
+    <p class="description">می توانید ماهیانه با کتابرسان تسویه حساب کنید.</p>
 
     <?php $this->renderPartial('//partial-views/_flashMessage');?>
 

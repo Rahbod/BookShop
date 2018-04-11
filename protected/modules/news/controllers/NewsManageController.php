@@ -107,7 +107,7 @@ class NewsManageController extends Controller
 		$this->layout = '//layouts/index';
 
 		$model = Tags::model()->findByPk($id);
-		$this->keywords = 'کتابیک,برچسب اخبار '.$model->title.',برچسب '.$model->title.','.$model->title;
+		$this->keywords = 'کتابرسان,برچسب اخبار '.$model->title.',برچسب '.$model->title.','.$model->title;
 		$this->pageTitle = 'برچسب '.$model->title;
 
 		// get latest news

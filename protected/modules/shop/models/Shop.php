@@ -223,7 +223,7 @@ class Shop
     public static function SetSuccessFlash($message = null)
     {
         Yii::app()->user->setFlash('success', $message?$message:'خرید شما با موفقیت ثبت شد.');
-        Yii::app()->user->setFlash('message', 'سفارش شما جهت انجام مراحل بعدی در اختیار تیم کتابیک قرار گرفت. جهت پیگیری وضعیت سفارش خود از طریق پنل کاربری اقدام نمایید.');
+        Yii::app()->user->setFlash('message', 'سفارش شما جهت انجام مراحل بعدی در اختیار تیم کتابرسان قرار گرفت. جهت پیگیری وضعیت سفارش خود از طریق پنل کاربری اقدام نمایید.');
     }
 
     public static function SetFailedFlash($message = null)

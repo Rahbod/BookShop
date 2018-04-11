@@ -587,7 +587,7 @@ class PublishersPanelController extends Controller
         $objPHPExcel = Yii::app()->yexcel->createPHPExcel();
         $objPHPExcel = new PHPExcel();
         // Set document properties
-        $objPHPExcel->getProperties()->setCreator("Ketabic Website")
+        $objPHPExcel->getProperties()->setCreator("Ketabrasan Website")
             ->setLastModifiedBy("")
             ->setTitle("YiiExcel Test Document")
             ->setSubject("Settlement Users Detail");

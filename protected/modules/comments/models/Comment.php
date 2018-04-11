@@ -357,7 +357,7 @@ class Comment extends CActiveRecord
             //if User model has been configured and comment posted by registered user
             $userConfig = Yii::app()->getModule('comments')->userConfig;
             if(strpos($userConfig['nameProperty'], '.') === false)
-                $userName .= $this->user->$userConfig['nameProperty'];
+                $userName .= $this->user->{$userConfig['nameProperty']};
             else {
                 $relations = explode('.', $userConfig['nameProperty']);
                 $user = $this->user;
@@ -366,7 +366,7 @@ class Comment extends CActiveRecord
                 $userName .= $user;
             }
             if(empty($user) && isset($userConfig['emailProperty']) && $email)
-                $userName .= $this->user->$userConfig['emailProperty'];
+                $userName .= $this->user->{$userConfig['emailProperty']};
         } else {
             $userName = $this->user_name;
             if($userName == 'Admin')
@@ -389,7 +389,7 @@ class Comment extends CActiveRecord
             //if User model has been configured and comment posted by registered user
             $userConfig = Yii::app()->getModule('comments')->userConfig;
             if(strpos($userConfig['emailProperty'], '.') === false)
-                $userEmail .= $this->user->$userConfig['emailProperty'];
+                $userEmail .= $this->user->{$userConfig['emailProperty']};
             else {
                 $relations = explode('.', $userConfig['emailProperty']);
                 $user = $this->user;
@@ -419,7 +419,7 @@ class Comment extends CActiveRecord
             //if User model has been configured and comment posted by registered user
             $userConfig = Yii::app()->getModule('comments')->userConfig;
             if(strpos($userConfig['rateProperty'], '.') === false)
-                $rate = $this->user->$userConfig['rateProperty'];
+                $rate = $this->user->{$userConfig['rateProperty']};
             else {
                 $relations = explode('.', $userConfig['rateProperty']);
                 $user = $this->user;
@@ -433,7 +433,7 @@ class Comment extends CActiveRecord
                 $rate = $user;
             }
             if(empty($user) && isset($userConfig['rateProperty']))
-                $rate .= $this->user->$userConfig['rateProperty'];
+                $rate .= $this->user->{$userConfig['rateProperty']};
         }
         return $rate;
     }
@@ -451,7 +451,7 @@ class Comment extends CActiveRecord
             $userConfig = Yii::app()->getModule('comments')->userConfig;
             if(isset($userConfig['avatarProperty'])) {
                 if(strpos($userConfig['avatarProperty'], '.') === false)
-                    $avatar = $this->user->$userConfig['avatarProperty'];
+                    $avatar = $this->user->{$userConfig['avatarProperty']};
                 else {
                     $relations = explode('.', $userConfig['avatarProperty']);
                     $user = $this->user;

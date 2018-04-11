@@ -1,6 +1,10 @@
 <?php if(count($comments) > 0):?>
     <ul class="comments-list">
         <?php foreach($comments as $key => $comment):
+            if($comment->status == Comment::STATUS_NOT_APPROWED &&
+                (!Yii::app()->user->isGuest &&
+                    (Yii::app()->user->id != $comment->creator_id && ((Yii::app()->user->roles=='publisher' && Yii::app()->user->getId() != $comment->books->publisher_id) || Yii::app()->user->roles=='user'))))
+                continue;
             ?>
             <li id="comment-<?php echo $comment->comment_id; ?>">
                 <?php

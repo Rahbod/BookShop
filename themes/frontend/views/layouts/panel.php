@@ -52,7 +52,7 @@
             <span class="icon-bar"></span>
         </button>
         <div class="pin"></div>
-        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
+        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابرســان</h1></a>
     </div>
 
     <div class="navbar-custom hidden-xs" id="mobile-menu">
@@ -80,7 +80,7 @@
 </nav>
 <div class="page-container">
     <div class="sidebar">
-        <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابیـــــک</h1></a>
+        <a class="navbar-brand hidden-lg hidden-md hidden-sm" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابرســان</h1></a>
         <div class="profile">
             <div class="profile-image">
                 <span class="panel-avatar">
@@ -144,6 +144,11 @@
                     echo '<span class="badge">'.Controller::parseNumbers($mc).'</span>';
                 ?></a>
             <a data-toggle="tooltip" data-placement="left" title="دستگاه های فعال" href="<?php echo Yii::app()->createUrl('users/public/sessions');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='users/public/sessions')?' active':'';?>"><i class="session-icon"></i><span class="text">دستگاه های فعال</span></a>
+            <?php if(Yii::app()->user->roles!='publisher'):?>
+                <a data-toggle="tooltip" data-placement="left" title="ثبت نام ناشرین" href="<?php echo Yii::app()->createUrl('publishers/panel/signup/step/agreement');?>" class="list-group-item signup-link<?php echo (Yii::app()->request->pathInfo=='publishers/panel/signup/step/agreement')?' active':'';?>">
+                    <i class="user-icon"></i><span class="text">ثبت نام ناشرین</span>
+                </a>
+            <?php endif;?>
         </div>
         <?php if(Yii::app()->user->roles=='publisher'):?>
             <div class="list-group">
@@ -154,6 +159,7 @@
                 <a data-toggle="tooltip" data-placement="left" title="تسویه حساب" href="<?php echo Yii::app()->createUrl('publishers/panel/settlement');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/settlement')?' active':'';?>"><i class="payment-icon"></i><span class="text">تسویه حساب</span></a>
                 <a data-toggle="tooltip" data-placement="left" title="پروفایل ناشر" href="<?php echo Yii::app()->createUrl('publishers/panel/account');?>" class="list-group-item<?php echo (Yii::app()->request->pathInfo=='publishers/panel/account')?' active':'';?>"><i class="user-icon"></i><span class="text">پروفایل ناشر</span></a>
             </div>
+        <?php else:?>
         <?php endif;?>
     </div>
     <div class="content">
@@ -165,7 +171,7 @@
             <a href="<?php echo Yii::app()->createUrl('users/public/setting');?>"><i class="setting-icon"></i></a>
         </div>
         <div class="pull-left copyright">
-            © 2016 Ketabic
+            © 2016 Ketabrasan
         </div>
     </div>
 </div>

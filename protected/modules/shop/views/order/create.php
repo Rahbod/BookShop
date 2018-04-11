@@ -67,7 +67,7 @@
 					<li class="list-group-item">این سفارش از طریق <span class="green-label"><?php echo CHtml::encode($shippingMethod->title);?></span> با هزینه <span class="green-label"><?php echo Controller::parseNumbers(number_format($shippingMethod->price));?></span> تومان به شما تحویل داده خواهد شد.</li>
 				</ul>
             </div>
-            <small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابیک، اعلام نموده‌اید. </small>
+            <small class="note">با انتخاب دکمه (پرداخت و ثبت سفارش) موافقت خود را با <a href="#">شرایط و قوانین</a> مربوط به ثبت سفارش کتابرسان، اعلام نموده‌اید. </small>
             <div class="buttons">
                 <a href="<?= $this->createUrl('/shop/order/back') ?>" class="btn-black pull-right">بازگشت</a>
                 <a href="<?= $this->createUrl('/shop/order/confirm') ?>" class="btn-green pull-left">پرداخت و ثبت سفارش</a>

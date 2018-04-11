@@ -1,1 +1,1 @@
-&copy; <?php echo date('Y');?> <strong>Ketabic</strong>. All rights reserved.
+&copy; <?php echo date('Y');?> <strong>Ketabrasan</strong>. All rights reserved.

@@ -28,7 +28,7 @@
                 <div class="namad"><img src="<?php echo Yii::app()->baseUrl.'/uploads/enamad.png';?>"></div>
                 <nav class="links">
                     <ul class="nav nav-justified">
-                        <li><a href="<?= $this->createUrl('/publishers') ?>">ناشران</a></li>
+                        <li><a href="<?= $this->createUrl('/publishers/panel/signup/step/agreement') ?>">ثبت نام ناشران</a></li>
                         <li><a href="<?= $this->createUrl('/help') ?>">راهنما</a></li>
                         <li><a href="<?= $this->createUrl('/contactus') ?>">تماس با ما</a></li>
                         <li><a href="<?= $this->createUrl('/about') ?>">درباره ما</a></li>
@@ -52,7 +52,7 @@
                     </ul>
                 </div>
             </nav>
-            <span class="pull-left copy-right"> © <?php echo date("Y");?> Ketabic</span>
+            <span class="pull-left copy-right"> © <?php echo date("Y");?> Ketabrasan</span>
         </div>
     </div>
 </div>

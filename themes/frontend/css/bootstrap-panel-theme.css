@@ -973,10 +973,13 @@ a:active{
     -o-transition: all 0.4s;
     transition: all 0.4s;
 }
+.sidebar .signup-link .user-icon{
+    background-image: url("../svg/user-white.svg");
+}
 .sidebar .signup-link:hover,
 .sidebar .signup-link:focus,
 .sidebar .signup-link:active{
-    background: #cb4638;
+    background: #cb4638 !important;
 }
 .dashboard-icon{
     background: url("../svg/dashboard.svg") no-repeat center;

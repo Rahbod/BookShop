@@ -53,7 +53,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="row">
-                    <?php if(!empty($model->icon) and file_exists(Yii::getPathOfAlias("webroot").'/uploads/books/icons/'.$model->icon)):?>
+                    <?php if(!empty($model->icon) and is_file(Yii::getPathOfAlias("webroot").'/uploads/books/icons/'.$model->icon)):?>
                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 thumb">
                             <img src="<?= Yii::app()->baseUrl.'/uploads/books/icons/'.$model->icon ?>" alt="<?= CHtml::encode($model->title) ?>" >
                         </div>
@@ -275,7 +275,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                 endif;
                                 ?>
                                 <?php
-                                if($model->preview_file && file_exists($previewPath.$model->preview_file)){
+                                if($model->preview_file && is_file($previewPath.$model->preview_file)){
                                     echo '<a href="'.Yii::app()->createUrl('/book/download/'.$model->id.'/'.urlencode($model->title).'/?preview=true').'" class="btn-blue" style="color: #fff;display: block;margin-top: 4px;overflow: hidden;width: 100%;"><i class="add-to-library-icon"></i>دریافت پیش نمایش</a>';
                                 }
                                 ?>
@@ -289,7 +289,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                             endforeach;
                                             echo implode(', ', $links);
                                             ?></span></p>
-                                    <?php endif;?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

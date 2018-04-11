@@ -18,7 +18,7 @@
     <div>
         <div class="green">
             <h4>اعتبار</h4>
-            <span>میزان اعتبار شما در کتابیک</span>
+            <span>میزان اعتبار شما در کتابرسان</span>
             <h3><?php echo number_format($model->userDetails->credit, 0, ',', '.');?> تومان</h3>
             <a href="<?php echo $this->createUrl('/users/credit/buy');?>">خرید اعتبار<i class="arrow-icon"></i></a>
         </div>

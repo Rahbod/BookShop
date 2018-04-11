@@ -42,6 +42,11 @@
             </div>
 
             <div class="form-group">
+                <?php echo $form->textField($model,'publication_name',array('placeholder'=>$model->getAttributeLabel('publication_name').' *','maxlength'=>100,'class'=>'form-control')); ?>
+                <?php echo $form->error($model,'publication_name'); ?>
+            </div>
+
+            <div class="form-group">
                 <?php echo $form->textField($model,'fa_web_url',array('placeholder'=>$model->getAttributeLabel('fa_web_url'),'maxlength'=>255,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'fa_web_url'); ?>
             </div>

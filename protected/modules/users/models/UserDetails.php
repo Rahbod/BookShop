@@ -86,9 +86,10 @@ class UserDetails extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('fa_name, publication_name, national_code, phone, zip_code, address, nickname, publisher_id', 'required', 'on' => 'update_real_profile, update_real_profile_admin'),
+            array('fa_name, publication_name, national_code, phone, zip_code, address, nickname', 'required', 'on' => 'update_real_profile, update_real_profile_admin'),
             array('national_card_image', 'required', 'on' => 'update_real_profile'),
-            array('fa_name, publication_name, nickname, post, company_name, registration_number, phone, zip_code, address, publisher_id', 'required', 'on' => 'update_legal_profile, update_legal_profile_admin'),
+            array('fa_name, publication_name, nickname, post, company_name, registration_number, phone, zip_code, address', 'required', 'on' => 'update_legal_profile, update_legal_profile_admin'),
+            array('publisher_id', 'required', 'on' => 'update_real_profile_admin, update_legal_profile_admin'),
             array('registration_certificate_image', 'required', 'on' => 'update_legal_profile'),
             array('publisher_id', 'required', 'on' => 'confirmDev'),
             array('publisher_id', 'unique'),
@@ -109,7 +110,7 @@ class UserDetails extends CActiveRecord
             array('commission', 'length', 'max' => 3),
             array('tax_exempt', 'length', 'max' => 1),
             array('iban', 'length', 'is' => 24, 'on' => 'update-settlement, update_real_profile, update_legal_profile', 'message' => 'شماره شبا باید 24 کاراکتر باشد'),
-            array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement, update_real_profile, update_legal_profile'),
+            array('iban', 'ibanRequiredConditional', 'on' => 'update-settlement'),
             array('monthly_settlement', 'numerical', 'integerOnly' => true),
             array('monthly_settlement', 'default', 'value' => 1),
             // change-credit scenario
