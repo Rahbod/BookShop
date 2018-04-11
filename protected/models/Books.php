@@ -28,6 +28,7 @@
  * @property integer $off_printed_price
  * @property integer $offPrice
  * @property integer $rate
+ * @property integer $allow_download
  *
  *
  * The followings are the available model relations:
@@ -89,10 +90,11 @@ class Books extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, category_id, icon', 'required'),
-			array('number_of_pages, seen, deleted, confirm_date', 'numerical', 'integerOnly' => true),
+			array('title, category_id, icon, allow_download', 'required'),
+			array('number_of_pages, seen, deleted, confirm_date, allow_download', 'numerical', 'integerOnly' => true),
 			array('description, change_log, formTags, formSeoTags, formAuthor, formTranslator', 'filter', 'filter' => array($this->_purifier, 'purify')),
 			array('title, icon, publisher_name', 'length', 'max' => 50),
+			array('allow_download', 'length', 'max' => 1),
 			array('number_of_pages', 'length', 'max' => 5),
 			array('publisher_id, category_id', 'length', 'max' => 10),
 			array('publisher_commission', 'length', 'max' => 3),
@@ -169,6 +171,7 @@ class Books extends CActiveRecord
 			'formSeoTags' => 'برچسب های سئو',
 			'formAuthor' => 'نویسندگان',
 			'formTranslator' => 'مترجمان',
+			'allow_download' => 'قابلیت دانلود از سایت',
 		);
 	}
 

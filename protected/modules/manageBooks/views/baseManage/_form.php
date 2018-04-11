@@ -82,6 +82,14 @@
 		<?php echo $form->error($model,'title'); ?>
 	</div>
 
+    <div class="row">
+		<?php echo $form->labelEx($model,'allow_download'); ?>
+		<?php echo $form->checkBox($model,'allow_download'); ?>
+		<?php echo $form->error($model,'allow_download'); ?>
+	</div>
+
+
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'publisher_id'); ?>
 		<?php echo $form->dropDownList($model, 'publisher_id', CHtml::listData(Users::model()->getPublishers()->getData(), 'id', 'userDetails.fa_name'),array(
