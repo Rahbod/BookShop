@@ -492,7 +492,7 @@ class UsersPublicController extends Controller
                     $this->redirect($redirect);
                 }
             } else {
-                Yii::app()->user->setFlash('login-failed', 'نام کاربری یا کلمه عبور اشتباه است.');
+//                Yii::app()->user->setFlash('login-failed', 'نام کاربری یا کلمه عبور اشتباه است.');
                 $login->password = '';
             }
         }
@@ -538,7 +538,7 @@ class UsersPublicController extends Controller
                             Yii::app()->user->setFlash('register-success', 'پیامک فعالسازی با موفقیت ارسال گردید.');
                         else
                             Yii::app()->user->setFlash('register-failed', $result->msg);
-                        $this->redirect(array('/smsVerify/' . $register->mobile));
+                        $this->redirect(array('/verify/' . $register->mobile));
                     }
                 }
             } else {
