@@ -3646,6 +3646,6 @@ input[type="checkbox"] + label:hover::before {
     display: table;
 }
 .book-buttons > *{
-    display: table-cell;
-    width: 1%;
+    display: table-cell !important;
+    width: 1% !important;
 }

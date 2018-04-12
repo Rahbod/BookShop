@@ -179,9 +179,11 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                     <h5 class="price text-danger">
                                         <span class="<?= $model->discount->hasPriceDiscount() ? 'text-line-through' : '' ?>">
                                         <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)) . ' تومان') ?></span>
+                                        <?php if ($model->lastPackage->sale_printed): ?>
                                         <small> / <span
                                                     class="<?= $model->discount->hasPrintedPriceDiscount() ? 'text-line-through' : '' ?>"><?= CHtml::encode('نسخه چاپی ' . Controller::parseNumbers(number_format($model->printed_price)) . ' تومان') ?></span>
                                         </small>
+                                        <?php endif;?>
                                     </h5>
                                     <h5 class="price">
                                         <?= $model->offPrice != 0 ? CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)) . ' تومان') : 'رایگان' ?>
@@ -205,8 +207,9 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                 <!--Buttons Show-->
                                 <?php
                                 $buttons = true;
+                                $bought = false;
                                 if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user'):
-                                    if (!$model->publisher_id || $model->publisher_id == Yii::app()->user->getId()):
+                                    if ($model->publisher_id && $model->publisher_id == Yii::app()->user->getId()):
                                         // user is publisher of this book
                                         echo '<h6>شما ناشر این کتاب هستید.</h6><div class="clearfix"></div>';
                                         $buttons = false;
@@ -216,56 +219,43 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                             'params' => array(':book_id' => $model->id, ':user_id' => Yii::app()->user->getId())
                                         ));
                                         $bought = Library::model()->find($criteria);
-                                        $isLogin = true;
                                     endif;
-                                else:
-                                    $isLogin = false;
                                 endif;
                                 ?>
 
                                 <div class="buttons book-buttons">
                                     <?php if($buttons):?>
                                         <?php
-                                        if ($isLogin):
-                                            if (!$bought):
-                                                echo $model->addToLibraryLink();
-                                                echo $model->addToCartForm();
-                                            else:
-                                                echo $model->downloadOrViewLink();
-                                                echo $model->addToCartForm();
-                                            endif;
-                                        else:
-                                            /*else:
-                                                if($bought->package_id):
-                                                    if($bought->package_id != $model->lastPackage->id):
-                                                        ?>
-                                                        <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
-                                                        <?php
-                                                    else:
-                                                        ?>
-                                                        <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
-                                                        <?php
-                                                    endif;
-                                                else:
+                                        echo $bought?$model->downloadOrViewLink():$model->addToLibraryLink();
+                                        /*else:
+                                            if($bought->package_id):
+                                                if($bought->package_id != $model->lastPackage->id):
                                                     ?>
                                                     <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
                                                     <?php
-                                                endif;*/
-                                            //endif;
-                                            ?>
-
-                                            <!--Add to Library-->
-                                            <a href="#" data-target="#login-modal" data-toggle="modal" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
-
-                                            <!--Add to Cart-->
-                                            <?= $model->addToCartForm();?>
-                                        <?php endif; ?>
+                                                else:
+                                                    ?>
+                                                    <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
+                                                    <?php
+                                                endif;
+                                            else:
+                                                ?>
+                                                <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
+                                                <?php
+                                            endif;*/
+                                        //endif;
+                                        ?>
                                     <?php endif; ?>
 
                                     <!--Preview Button-->
                                     <?php if ($model->preview_file && is_file($previewPath . $model->preview_file)):
                                         echo $model->downloadOrViewLink(true, 'btn-blue')?>
                                     <?php endif; ?>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="buttons book-buttons">
+                                    <!--Add to Cart-->
+                                    <?= $model->addToCartForm();?>
                                 </div>
                                 <!--Buttons Show End-->
 

@@ -1,6 +1,10 @@
 <?php
 /* @var $this TicketsManageController */
 /* @var $model Tickets */
+if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
+    $alertView = '//layouts/_alertMessage';
+elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+    $alertView = '//partial-views/_alertMessage';
 ?>
 <div class="white-form">
     <div class="pull-left">
@@ -37,12 +41,12 @@
     <p class="description">با ارسال تیکت می توانید با بخش پشتیبانی در ارتباط باشید.</p>
 
     <?php if($model->status == 'close'):
-        $this->renderPartial('//layouts/_alertMessage',array(
+        $this->renderPartial($alertView,array(
             'type' => 'danger',
             'message' => 'تیکت مورد نظر بسته شده و امکان ارسال پیام وجود ندارد.'
         ));
     elseif($model->status == 'pending'):
-        $this->renderPartial('//layouts/_alertMessage',array(
+        $this->renderPartial($alertView,array(
             'type' => 'warning',
             'message' => 'پیام شما توسط کارشناسان در حال بررسی می باشد.'
         ));

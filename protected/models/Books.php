@@ -640,7 +640,7 @@ class Books extends CActiveRecord
      */
     public function addToCartForm()
     {
-        if (!$this->lastPackage->sale_printed)
+        if (!(int)$this->lastPackage->sale_printed)
             return '';
         $html = '';
         $html .= CHtml::beginForm(array("/shop/cart/add"));
@@ -658,8 +658,18 @@ class Books extends CActiveRecord
      */
     public function addToLibraryLink($text = 'افزودن به کتابخانه', $class = 'btn-red')
     {
+        // user logged in
+        if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
+            return CHtml::tag('a', array(
+                'href' => $this->getBuyUrl(),
+                'class' => $class
+            ), "<i class=\"add-to-library-icon\"></i> $text");
+
+        // user is guest
         return CHtml::tag('a', array(
-            'href' => $this->getBuyUrl(),
+            'href' => '#',
+            'data-toggle' => "modal",
+            'data-target' => "#login-modal",
             'class' => $class
         ), "<i class=\"add-to-library-icon\"></i> $text");
     }
