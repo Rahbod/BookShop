@@ -662,7 +662,8 @@ class Books extends CActiveRecord
         if (!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
             return CHtml::tag('a', array(
                 'href' => $this->getBuyUrl(),
-                'class' => $class
+                'class' => $class,
+                'onclick' => 'js:if(!confirm(\'آیا مایل به خرید کتاب هستید؟\'))return false;'
             ), "<i class=\"add-to-library-icon\"></i> $text");
 
         // user is guest
@@ -679,7 +680,7 @@ class Books extends CActiveRecord
      * @param string $class
      * @return string
      */
-    public function downloadOrViewLink($preview_file = false, $class = 'btn-green')
+    public function downloadOrViewLink($preview_file = false, $class = 'btn-red')
     {
         $text = $this->allow_download ? ($preview_file ? 'دانلود پیش نمایش' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
         return CHtml::tag('a', array(

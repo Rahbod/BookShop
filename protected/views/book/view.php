@@ -252,7 +252,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                         echo $model->downloadOrViewLink(true, 'btn-blue')?>
                                     <?php endif; ?>
                                 </div>
-                                <div class="clearfix"></div>
+                                <div class="clearfix"></div><br>
                                 <div class="buttons book-buttons">
                                     <!--Add to Cart-->
                                     <?= $model->addToCartForm();?>

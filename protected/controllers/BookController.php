@@ -494,6 +494,14 @@ class BookController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/viewer';
         $model = $this->loadModel($id);
+
+        if(isset($_GET['preview'])){
+            if(!$model->allow_download)
+                $this->render('book_reader', compact('model'));
+            else
+                $this->redirect($model->getDownloadUrl(true));
+        }
+
         $criteria = new CDbCriteria(array(
             'condition' => 'book_id = :book_id And user_id = :user_id',
             'params' => array(':book_id' => $model->id, ':user_id' => Yii::app()->user->getId())

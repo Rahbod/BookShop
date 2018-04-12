@@ -8,7 +8,7 @@ $filePath = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
 
 $baseUrl = Yii::app()->theme->baseUrl.'/plugins';
 $cs = Yii::app()->clientScript;
-
+$view = false;
 if(isset($_GET['preview']) && is_file($previewPath.$model->preview_file)){
     $filename = $model->preview_file;
     $url = Yii::app()->getBaseUrl(true).'/uploads/books/previews/'.$model->preview_file;
@@ -23,7 +23,7 @@ if(isset($_GET['preview']) && is_file($previewPath.$model->preview_file)){
     } elseif ($package->pdf_file_name && is_file($filePath . pathinfo($package->pdf_file_name, PATHINFO_FILENAME) . '.pdf')) {
         $url = Yii::app()->baseUrl . '/uploads/books/files/' . pathinfo($package->pdf_file_name, PATHINFO_FILENAME) . '.pdf';
         $ext = 'pdf';
-        $view = true;
+
     }
 }
 ?>
