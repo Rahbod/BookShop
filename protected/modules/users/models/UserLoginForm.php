@@ -16,6 +16,7 @@ class UserLoginForm extends CFormModel
 	public $pic = null;
 	public $rememberMe;
 	public $OAuth;
+	public $SSO;
 	public $authenticate_field;
 	public $oauth_authenticate_field;
 
@@ -30,7 +31,7 @@ class UserLoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-            array('verification_field_value, password', 'required' ,'except' => 'OAuth'),
+            array('verification_field_value, password', 'required' ,'except' => 'OAuth, sso'),
             array('email ,OAuth', 'required' ,'on' => 'OAuth'),
             // rememberMe needs to be a boolean
             array('rememberMe', 'boolean'),
@@ -41,9 +42,9 @@ class UserLoginForm extends CFormModel
             array('verification_field_value', 'length', 'is' => 11, 'on' => 'mobileAuth'),
             // multiple username
             array('verification_field_value, verification_field', 'safe'),
-            array('verification_field_value', 'check', 'fields' => ['mobile', 'email']),
+            array('verification_field_value', 'check', 'except' => 'OAuth, sso'),
             // authenticate_field needs to be authenticated
-            array('authenticate_field', 'authenticate','except' => 'OAuth'),
+            array('authenticate_field', 'authenticate','except' => 'OAuth, sso'),
 			array('name, pic', 'safe', 'on' => 'OAuth'),
 		);
 	}
@@ -65,6 +66,7 @@ class UserLoginForm extends CFormModel
             $mobile = Users::model()->find($criteria);
             if($mobile){
                 $this->verification_field = 'mobile';
+                $this->verification_field_value = $mobile->mobile;
                 $this->scenario = 'mobileAuth';
             }
         }
@@ -80,6 +82,7 @@ class UserLoginForm extends CFormModel
             'password' => 'کلمه عبور',
             'rememberMe'=>'مرا بخاطر بسپار',
             'email' => 'پست الکترونیک',
+            'mobile' => 'شماره موبایل',
             'authenticate_field' => 'Authenticate Field',
             'verification_field_value' => 'شماره موبایل یا پست الکترونیکی',
 		);
@@ -100,8 +103,12 @@ class UserLoginForm extends CFormModel
 				if($this->_identity->errorCode === 3){
 					if($this->scenario == 'app_login')
 						$this->addError($attribute, 'این حساب کاربری فعال نشده است.');
-					else
-						$this->addError($attribute, 'این حساب کاربری فعال نشده است.<br><a href="' . Yii::app()->createUrl('/users/public/resendVerification', array('email' => $this->email)) . '">ارسال مجدد لینک فعال سازی</a>');
+					else{
+                        $resendVerificationUrl = Users::$verification_field=='email'?
+                            CHtml::link('ارسال مجدد لینک فعال سازی', Yii::app()->createUrl('/users/public/resendVerification', array('email' => $this->email))):
+                            CHtml::link('ارسال مجدد پیامک فعال سازی', Yii::app()->createUrl('/users/public/resendVerification/'.$this->verification_field_value));
+                        $this->addError($attribute, 'این حساب کاربری فعال نشده است.<br>'.$resendVerificationUrl);
+                    }
 				}elseif($this->_identity->errorCode === 4)
 					$this->addError($attribute, 'این حساب کاربری مسدود شده است.');
 				elseif($this->_identity->errorCode === 5)
@@ -121,13 +128,15 @@ class UserLoginForm extends CFormModel
 	{
 		if($clearIdentity)
 			$this->_identity = null;
-		if($this->_identity === null){
-			if($this->OAuth)
-				$this->_identity = new UserIdentity($this->verification_field_value, null, $this->OAuth);
-			else
-				$this->_identity = new UserIdentity($this->verification_field_value, $this->password,null,$this->verification_field);
-			$this->_identity->authenticate();
-		}
+		if($this->_identity === null) {
+            if ($this->OAuth)
+                $this->_identity = new UserIdentity($this->email, null, $this->OAuth);
+            elseif ($this->SSO)
+                $this->_identity = new UserIdentity($this->verification_field_value, null, true, $this->verification_field);
+            else
+                $this->_identity = new UserIdentity($this->verification_field_value, $this->password, null, $this->verification_field);
+            $this->_identity->authenticate();
+        }
 		if($this->_identity->errorCode === UserIdentity::ERROR_NONE){
 			if(!$this->OAuth)
 				$duration = $this->rememberMe?3600 * 24 * 30:0; // 30 days

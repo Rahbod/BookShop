@@ -144,6 +144,7 @@ return array(
 			'appendParams'=>true,
 			'rules'=>array(
 				'verify/<mobile:\d+>' => 'users/public/verify',
+				'users/public/resendVerification/<mobile:\d+>' => '/users/public/resendVerification',
 				'<action:(about|contactus|help|publishers)>' => 'site/<action>',
 				'<action:(register|login)>' => 'users/public/index',
 				'<action:(logout|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',

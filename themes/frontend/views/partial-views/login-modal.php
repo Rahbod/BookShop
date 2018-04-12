@@ -1,3 +1,6 @@
+<?php
+/**@var $this Controller*/
+?>
 <div id="login-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -25,21 +28,26 @@
                                         var form = $("#login-form");
                                         var loading = $(".modal .loading-container");
                                         var url = \''.Yii::app()->createUrl('/login').'\';
-                                        submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                        if(form.find("#verification").val() == "mobile"){
+                                            submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
+                                        }else
+                                            submitAjaxForm(form ,url ,loading ,"console.log(html); if(html.status){ if(typeof html.url !== \'undefined\') window.location = html.url; else location.reload(); }else $(\'#UserLoginForm_authenticate_field\').html(html.errors);");
                                     }
                                 }'
                             )
                         ));
+                        echo CHtml::hiddenField('verification_field',Users::$verification_field, array('id' => 'verification'));
                         echo CHtml::hiddenField('ajax','login-form');
                         echo CHtml::hiddenField('returnUrl',Yii::app()->request->url);
                         ?>
                         <div class="form-group"><p id="UserLoginForm_authenticate_field_em_" class="text-center"></p></div>
                         <div class="form-group">
-                            <?php echo $formL->emailField($loginModel,'email' ,array(
-                                'placeholder' => 'پست الکترونیکی',
-                                'class' => 'text-field ltr text-right'
+                            <?php echo $formL->textField($loginModel, 'verification_field_value',array(
+                                    'id' => 'verification_field_value',
+                                    'placeholder' => $loginModel->getAttributeLabel(Users::$verification_field),
+                                    'class' => 'text-field ltr text-right'
                             ));
-                            echo $formL->error($loginModel,'email'); ?>
+                            echo $formL->error($loginModel,'verification_field_value'); ?>
                         </div>
                         <div class="form-group">
                             <?php echo $formL->passwordField($loginModel,'password',array(
@@ -88,11 +96,11 @@
                     echo CHtml::hiddenField('ajax','register-form'); ?>
                     <div class="form-group"><p id="Users_authenticate_field_em_register" class="text-center"></p></div>
                     <div class="form-group">
-                        <?php echo $formR->emailField($registerModal,'email' ,array(
-                            'placeholder' => 'پست الکترونیکی',
+                        <?php echo $formR->textField($registerModal,Users::$verification_field ,array(
+                            'placeholder' => $registerModal->getAttributeLabel(Users::$verification_field),
                             'class' => 'text-field ltr text-right'
                         ));
-                        echo $formR->error($registerModal,'email'); ?>
+                        echo $formR->error($registerModal,Users::$verification_field); ?>
                     </div>
                     <div class="form-group">
                         <?php echo $formR->passwordField($registerModal,'password',array(
@@ -106,7 +114,7 @@
                         <?= CHtml::submitButton('ثبت نام',array('class'=>"btn-blue")); ?>
                     </div>
                     <div class="form-group">
-                        <a href="#" data-target="#login-modal-login-tab" data-toggle="tab" id="login-tab-trigger">ورود به حساب کاربری</a>
+                        <a href="#" data-target="#login-modal-login-tab" data-`toggle="tab" id="login-tab-trigger">ورود به حساب کاربری</a>
                     </div>
                     <? $this->endWidget(); ?>
                 </div>

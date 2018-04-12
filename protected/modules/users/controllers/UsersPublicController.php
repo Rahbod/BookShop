@@ -42,7 +42,8 @@ class UsersPublicController extends Controller
         );
     }
 
-    public function actions(){
+    public function actions()
+    {
         return array(
             'upload' => array(
                 'class' => 'ext.dropZoneUploader.actions.AjaxUploadAction',
@@ -50,7 +51,7 @@ class UsersPublicController extends Controller
                 'attribute' => 'avatar',
                 'rename' => 'random',
                 'validateOptions' => array(
-                    'acceptedTypes' => array('jpg','jpeg','png')
+                    'acceptedTypes' => array('jpg', 'jpeg', 'png')
                 ),
                 'insert' => true,
                 'module' => 'users',
@@ -59,7 +60,7 @@ class UsersPublicController extends Controller
                 'scenario' => 'upload_photo',
                 'storeMode' => 'field',
                 'afterSaveActions' => array(
-                    'thumbnail' => array('width'=>200,'height'=>200, 'replaceOrigin' => true),
+                    'thumbnail' => array('width' => 200, 'height' => 200, 'replaceOrigin' => true),
                     'expression' => 'Yii::app()->user->setState("avatar", {thumburl})'
                 )
             ),
@@ -226,7 +227,7 @@ class UsersPublicController extends Controller
             if ($model) {
                 if ($model->status == 'active') {
                     if ($model->change_password_request_count != 3) {
-                        if(Users::$verification_field == 'email') {
+                        if (Users::$verification_field == 'email') {
                             $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date . '#' . time());
                             $count = intval($model->change_password_request_count);
                             $model->updateByPk($model->id, array('verification_token' => $token, 'change_password_request_count' => $count + 1));
@@ -246,7 +247,7 @@ class UsersPublicController extends Controller
                                     'hasError' => true,
                                     'message' => 'در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.'
                                 ));
-                        }elseif (Users::$verification_field == 'mobile'){
+                        } elseif (Users::$verification_field == 'mobile') {
                             $result = $this->newPasswordSendSms($model);
                             if ($result->status)
                                 echo CJSON::encode(['status' => $result->status, 'message' => 'کلمه عبور جدید از طریق پیامک برای شما ارسال گردید.']);
@@ -445,7 +446,7 @@ class UsersPublicController extends Controller
 
     public function actionGoogleLogin()
     {
-        if(isset($_REQUEST['return-url']))
+        if (isset($_REQUEST['return-url']))
             Yii::app()->user->returnUrl = $_REQUEST['return-url'];
         $googleAuth = new GoogleOAuth();
         $model = new UserLoginForm('OAuth');
@@ -486,19 +487,17 @@ class UsersPublicController extends Controller
                 if (isset($_POST['ajax'])) {
                     echo CJSON::encode(array('status' => true, 'url' => $redirect, 'msg' => 'در حال انتقال ...'));
                     Yii::app()->end();
-                } else
-                {
+                } else {
                     Yii::app()->user->setFlash('login-success', 'در حال انتقال ...');
                     $this->redirect($redirect);
                 }
-            } else
-            {
+            } else {
                 Yii::app()->user->setFlash('login-failed', 'نام کاربری یا کلمه عبور اشتباه است.');
                 $login->password = '';
             }
         }
         // End of login codes
-        
+
         // Register codes
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'register-form') {
             $errors = CActiveForm::validate($register);
@@ -512,7 +511,7 @@ class UsersPublicController extends Controller
             $register->status = 'pending';
             $register->create_date = time();
             if ($register->save()) {
-                if(Users::$verification_field=='email') {
+                if (Users::$verification_field == 'email') {
                     $token = md5($register->id . '#' . $register->password . '#' . $register->email . '#' . $register->create_date);
                     $register->updateByPk($register->id, array('verification_token' => $token));
                     $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
@@ -526,28 +525,27 @@ class UsersPublicController extends Controller
                         Yii::app()->end();
                     } else
                         Yii::app()->user->setFlash('register-success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا پست الکترونیکی خود را فعال کنید.');
-                }elseif(Users::$verification_field == 'mobile'){
+                } elseif (Users::$verification_field == 'mobile') {
                     $result = $this->sendVerificationSms($register->mobile);
                     if (isset($_POST['ajax'])) {
                         if ($result->status)
-                            echo CJSON::encode(['status' => $result->status, 'msg' => 'پیامک فعالسازی با موفقیت ارسال گردید.', 'mobile' => true]);
+                            echo CJSON::encode(['status' => $result->status, 'msg' => 'پیامک فعالسازی با موفقیت ارسال گردید.', 'url' => $this->createUrl('/verify/' . $register->mobile)]);
                         else
-                            echo CJSON::encode(['status' => $result->status, 'msg' => $result->msg, 'mobile' => true]);
+                            echo CJSON::encode(['status' => $result->status, 'msg' => $result->msg]);
                         Yii::app()->end();
                     } else {
                         if ($result->status)
                             Yii::app()->user->setFlash('register-success', 'پیامک فعالسازی با موفقیت ارسال گردید.');
                         else
                             Yii::app()->user->setFlash('register-failed', $result->msg);
-                        $this->redirect(array('/smsVerify/'.$register->mobile));
+                        $this->redirect(array('/smsVerify/' . $register->mobile));
                     }
                 }
-            } else
-            {
+            } else {
                 if (isset($_POST['ajax'])) {
                     echo CJSON::encode(array('status' => false, 'msg' => 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.'));
                     Yii::app()->end();
-                }else
+                } else
                     Yii::app()->user->setFlash('register-failed', 'متاسفانه در ثبت نام مشکلی بوجود آمده است. لطفا مجددا سعی کنید.');
             }
         }
@@ -559,23 +557,33 @@ class UsersPublicController extends Controller
         ));
     }
 
-    public function actionResendVerification()
+    public function actionResendVerification($mobile = null)
     {
-        $email = Yii::app()->request->getQuery('email');
-        if (!is_null($email)) {
-            $model = Users::model()->find('email = :email', array(':email' => $email));
-            $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
-            $model->updateByPk($model->id, array('verification_token' => $token));
-            $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
-            $message .= '<div style="text-align: right;font-size: 9pt;">';
-            $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
-            $message .= '</div>';
-            $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
-            Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
-            Yii::app()->user->setFlash('success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
-            $this->redirect(array('/login'));
+        if (Users::$verification_field == 'email') {
+            $email = Yii::app()->request->getQuery('email');
+            if (!is_null($email)) {
+                $model = Users::model()->find('email = :email', array(':email' => $email));
+                $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date);
+                $model->updateByPk($model->id, array('verification_token' => $token));
+                $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
+                $message .= '<div style="text-align: right;font-size: 9pt;">';
+                $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
+                $message .= '</div>';
+                $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
+                Mailer::mail($model->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
+                Yii::app()->user->setFlash('success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا Inbox و Spam پست الکترونیکی خود را چک کنید.');
+                $this->redirect(array('/login'));
+            } else
+                $this->redirect(array('/site'));
+        } elseif (Users::$verification_field == 'mobile' && $mobile) {
+            $result = $this->sendVerificationSms($mobile);
+            if ($result->status)
+                Yii::app()->user->setFlash('success', 'پیامک فعالسازی با موفقیت ارسال گردید.');
+            else
+                Yii::app()->user->setFlash('failed', $result->msg);
+            $this->redirect(array('/verify/' . $mobile));
         } else
-            $this->redirect(array('/site'));
+            $this->redirect(Yii::app()->getBaseUrl(true));
     }
 
     /**
@@ -585,9 +593,9 @@ class UsersPublicController extends Controller
     {
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
-        $model =new Sessions('search');
+        $model = new Sessions('search');
         $model->unsetAttributes();
-        if(isset($_GET['Sessions']))
+        if (isset($_GET['Sessions']))
             $model->attributes = $_GET['Sessions'];
         $model->user_type = "user";
         $model->user_id = Yii::app()->user->getId();
@@ -601,7 +609,7 @@ class UsersPublicController extends Controller
     public function actionRemoveSession($id)
     {
         $model = Sessions::model()->findByPk($id);
-        if($model !== null)
+        if ($model !== null)
             $model->delete();
         $this->redirect(array('/users/public/sessions'));
     }
@@ -610,14 +618,16 @@ class UsersPublicController extends Controller
     /**
      * Verify User
      */
-    public function actionVerify($mobile)
+    public function actionVerify($mobile = null)
     {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/login';
         if (!Yii::app()->user->isGuest and Yii::app()->user->type != 'admin')
             $this->redirect($this->createAbsoluteUrl('//'));
         else if (!Yii::app()->user->isGuest and Yii::app()->user->type == 'admin')
             Yii::app()->user->logout(false);
 
-        if(Users::$verification_field == 'email') {
+        if (Users::$verification_field == 'email') {
             $token = Yii::app()->request->getQuery('token');
             $model = Users::model()->find('verification_token=:token', array(':token' => $token));
 
@@ -647,42 +657,35 @@ class UsersPublicController extends Controller
                 Yii::app()->user->setFlash('failed', 'لینک فعال سازی نامعتبر می باشد.');
                 $this->redirect($this->createUrl('/login'));
             }
-        }elseif(Users::$verification_field =='mobile' && $mobile){
+        } elseif (Users::$verification_field == 'mobile' && $mobile) {
             $model = Users::model()->findByAttributes(['mobile' => $mobile]);
             if ($model) {
-                if ($model->status == 'pending') {
-                    $model->updateByPk($model->id, array('status' => 'active'));
-                    Yii::app()->user->setFlash('success', 'حساب کاربری شما فعال گردید.');
-                    $login = new UserLoginForm('OAuth');
-                    $login->verification_field_value = $model->mobile;
-                    $login->verification_field = Users::$verification_field;
-                    $login->OAuth = true;
-                    if ($login->validate() && $login->login(true) === true)
-                        $this->redirect(array('/dashboard'));
-                    $this->redirect($this->createUrl('/login'));
-                } elseif ($model->status == 'active') {
-                    Yii::app()->user->setFlash('failed', 'این حساب کاربری قبلا فعال شده است.');
-                    $this->redirect($this->createUrl('/login'));
-                } else {
-                    Yii::app()->user->setFlash('failed', 'امکان فعال سازی این کاربر وجود ندارد. لطفا مجددا ثبت نام کنید.');
-                    $this->redirect($this->createUrl('/login'));
+                if (isset($_POST['verification'])) {
+                    if ($model->status == 'pending') {
+                        if (empty($_POST['verification']) || $_POST['verification'] != $model->verification_token)
+                            Yii::app()->user->setFlash('failed', 'کد فعالسازی نامعتبر است.');
+                        else {
+                            $model->updateByPk($model->id, array('status' => 'active'));
+                            Yii::app()->user->setFlash('success', 'حساب کاربری شما فعال گردید.');
+                            $login = new UserLoginForm('sso');
+                            $login->verification_field_value = $model->mobile;
+                            $login->verification_field = Users::$verification_field;
+                            $login->SSO = true;
+                            if ($login->validate() && $login->login(true) === true)
+                                $this->redirect(array('/dashboard'));
+                            $this->redirect($this->createUrl('/login'));
+                        }
+                    } elseif ($model->status == 'active')
+                        Yii::app()->user->setFlash('failed', 'حساب کاربری شما قبلا فعال شده است.');
+                    else
+                        Yii::app()->user->setFlash('failed', 'امکان فعال سازی این کاربر وجود ندارد. لطفا مجددا ثبت نام کنید.');
+                    $this->refresh();
                 }
+                $this->render('verify', compact('model'));
             } else {
                 Yii::app()->user->setFlash('failed', 'لینک فعال سازی نامعتبر می باشد.');
                 $this->redirect($this->createUrl('/login'));
             }
-        }
-    }
-
-    public function actionSmsResend($mobile)
-    {
-        if (Yii::app()->request->isAjaxRequest) {
-            $result = $this->sendVerificationSms($mobile);
-            if ($result->status)
-                echo CJSON::encode(['status' => $result->status, 'message' => 'پیامک فعالسازی با موفقیت ارسال گردید.']);
-            else
-                echo CJSON::encode(['status' => $result->status, 'message' => $result->msg]);
-            Yii::app()->end();
         }
     }
 
@@ -692,22 +695,20 @@ class UsersPublicController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    private function sendVerificationSms($mobile){
+    private function sendVerificationSms($mobile)
+    {
         $sms = new SendSMS();
-        if(!$sms->ValidateNumber($mobile))
-            return (object)['status' => false, 'msg' => 'شماره موبایل کاربر معتبر نیست.'];
-
         $model = Users::model()->find('mobile=:mobile', array(':mobile' => $mobile));
-        if(!$model) return (object)['status' => false, 'msg' => 'کاربری با این شماره یافت نشد.'];
+        if (!$model) return (object)['status' => false, 'msg' => 'کاربری با این شماره یافت نشد.'];
 
-        $token = rand(123456,987697);
+        $token = rand(123456, 987697);
         $model->scenario = 'verification';
-        if(!$model->updateByPk($model->id, array('verification_token' => $token)))
+        if (!$model->updateByPk($model->id, array('verification_token' => $token)))
             return (object)['status' => false, 'msg' => 'ایجاد کد فعالسازی با مشکل مواجه شد.'];
         $app = Yii::app()->name;
         $sms->AddMessage("کد فعالسازی شما در {$app}: {$token}");
         $sms->AddNumber($mobile);
-        return (object)['status' => @$sms->SendWithLine(),'msg' => 'ارسال پیامک با مشکل مواجه شد، لطفا مجددا تلاش فرمایید.', 'token' => $token];
+        return (object)['status' => @$sms->SendWithLine(), 'msg' => 'ارسال پیامک با مشکل مواجه شد، لطفا مجددا تلاش فرمایید.', 'token' => $token];
     }
 
     /**
@@ -716,18 +717,19 @@ class UsersPublicController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    private function newPasswordSendSms($model){
+    private function newPasswordSendSms($model)
+    {
         $sms = new SendSMS();
-        if(!$sms->ValidateNumber($model->mobile))
+        if (!$sms->ValidateNumber($model->mobile))
             return (object)['status' => false, 'msg' => 'شماره موبایل کاربر معتبر نیست.'];
 
         $model->scenario = 'sms_change_password';
-        $newPass = rand(1234561,9876972);
-        if(!$model->updateByPk($model->id, array('password' => (new bCrypt())->hash($newPass))))
+        $newPass = rand(1234561, 9876972);
+        if (!$model->updateByPk($model->id, array('password' => (new bCrypt())->hash($newPass))))
             return (object)['status' => false, 'msg' => 'بازنشانی کلمه عبور با مشکل مواجه شد.'];
         $app = Yii::app()->name;
         $sms->AddMessage("کلمه عبور جدید شما در{$app}: {$newPass}");
         $sms->AddNumber($model->mobile);
-        return (object)['status' => @$sms->SendWithLine(),'msg' => 'ارسال پیامک با مشکل مواجه شد، لطفا مجددا تلاش فرمایید.', 'newPass' => $newPass];
+        return (object)['status' => @$sms->SendWithLine(), 'msg' => 'ارسال پیامک با مشکل مواجه شد، لطفا مجددا تلاش فرمایید.', 'newPass' => $newPass];
     }
 }

@@ -2391,3 +2391,6 @@ tfoot {
 .profile .profile-image .panel-avatar:hover .upload-overlay{
     display: block !important;
 }
+.login-form > .loading-container{
+    position: fixed !important;
+}
