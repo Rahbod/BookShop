@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-row">
-            <?php echo $form->textField($model, 'verification_field_value', array('class' => 'ltr text-right form-control', 'placeholder' => 'شماره موبایل')); ?>
+            <?php echo $form->textField($model, 'verification_field_value', array('class' => 'ltr text-right form-control', 'placeholder' => $model->getAttributeLabel(Users::$verification_field))); ?>
             <?php echo $form->error($model, 'verification_field_value'); ?>
             <span class="transition icon-envelope"></span>
         </div>

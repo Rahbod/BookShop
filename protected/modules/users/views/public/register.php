@@ -25,8 +25,8 @@
             ),
         )); ?>
         <div class="form-row">
-            <?php echo $form->textField($model,$this->verification_field,array('class'=>'form-control','placeholder'=>$model->getAttributeLabel($this->verification_field))); ?>
-            <?php echo $form->error($model,$this->verification_field); ?>
+            <?php echo $form->textField($model,Users::$verification_field,array('class'=>'form-control','placeholder'=>$model->getAttributeLabel(Users::$verification_field))); ?>
+            <?php echo $form->error($model,Users::$verification_field); ?>
             <span class="transition icon-envelope"></span>
         </div>
         <div class="form-row">

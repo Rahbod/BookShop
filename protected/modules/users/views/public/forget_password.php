@@ -12,7 +12,7 @@
         <div class="alert alert-success hidden" id="message"></div>
 
         <div class="form-row">
-            <?php echo CHtml::textField($this->verification_field, '',array('class'=>'form-control','placeholder'=>(new Users())->getAttributeLabel($this->verification_field))); ?>
+            <?php echo CHtml::textField(Users::$verification_field, '',array('class'=>'form-control','placeholder'=>(new Users())->getAttributeLabel($this->verification_field))); ?>
         </div>
         <div class="form-row">
             <?php echo CHtml::ajaxSubmitButton('ارسال', Yii::app()->createUrl('/users/public/forgetPassword'), array(

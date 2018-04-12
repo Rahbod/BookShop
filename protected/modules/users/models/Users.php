@@ -31,6 +31,8 @@
  */
 class Users extends CActiveRecord
 {
+    public static $verification_field = 'mobile';
+
     /**
      * @return string the associated database table name
      */
