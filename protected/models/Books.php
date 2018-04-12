@@ -619,4 +619,62 @@ class Books extends CActiveRecord
     {
         return Yii::app()->createAbsoluteUrl('/book/' . $this->id . '/' . urlencode($this->title));
     }
+
+    public function getBuyUrl()
+    {
+        return Yii::app()->createAbsoluteUrl('/book/buy/' . $this->id . '/' . urlencode($this->title));
+    }
+
+    public function getDownloadUrl($preview_file = false, $reading = false)
+    {
+        $u = Yii::app()->createAbsoluteUrl('/book/download/' . $this->id . '/' . urlencode($this->title));
+        if ($reading)
+            $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title));
+        if ($preview_file)
+            $u .= '/?preview=true';
+        return $u;
+    }
+
+    /**
+     * @return string
+     */
+    public function addToCartForm()
+    {
+        if (!$this->lastPackage->sale_printed)
+            return '';
+        $html = '';
+        $html .= CHtml::beginForm(array("/shop/cart/add"));
+        $html .= CHtml::hiddenField("book_id", $this->id);
+        $html .= CHtml::hiddenField("qty", 1);
+        $html .= CHtml::tag("button", array("type" => "submit", "class" => "btn-green"), '<i class="cart-icon"></i>خرید نسخه چاپی');
+        $html .= CHtml::endForm();
+        return $html;
+    }
+
+    /**
+     * @param string $text
+     * @param string $class
+     * @return string
+     */
+    public function addToLibraryLink($text = 'افزودن به کتابخانه', $class = 'btn-red')
+    {
+        return CHtml::tag('a', array(
+            'href' => $this->getBuyUrl(),
+            'class' => $class
+        ), "<i class=\"add-to-library-icon\"></i> $text");
+    }
+
+    /**
+     * @param bool $preview_file
+     * @param string $class
+     * @return string
+     */
+    public function downloadOrViewLink($preview_file = false, $class = 'btn-green')
+    {
+        $text = $this->allow_download ? ($preview_file ? 'دانلود پیش نمایش' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
+        return CHtml::tag('a', array(
+            'href' => $this->getDownloadUrl($preview_file, !$this->allow_download),
+            'class' => $class
+        ), "<i class=\"add-to-library-icon\"></i> $text");
+    }
 }

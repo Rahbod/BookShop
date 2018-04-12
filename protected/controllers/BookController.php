@@ -421,6 +421,10 @@ class BookController extends Controller
     public function actionDownload($id, $title)
     {
         $model = $this->loadModel($id);
+        if(!$model->allow_download){
+            Yii::app()->user->setFlash('failed', 'متاسفانه این کتاب اجازه دانلود فایل را ندارد.');
+            $this->redirect($model->getViewUrl());
+        }
         if(isset($_GET['preview']) && $_GET['preview'] == true){
             $previewPath = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
             $ext = strtolower(pathinfo($model->preview_file, PATHINFO_EXTENSION));
@@ -492,13 +496,18 @@ class BookController extends Controller
         $model = $this->loadModel($id);
         $criteria = new CDbCriteria(array(
             'condition' => 'book_id = :book_id And user_id = :user_id',
-            'params' => array(':book_id'=>$model->id, ':user_id' => Yii::app()->user->getId())
+            'params' => array(':book_id' => $model->id, ':user_id' => Yii::app()->user->getId())
         ));
         $bought = Library::model()->find($criteria);
-        if($bought){
-            $this->render('book_reader', compact('model'));
-        }else
+        if ($bought) {
+            if(!$model->allow_download)
+                $this->render('book_reader', compact('model'));
+            else
+                $this->redirect($model->getDownloadUrl());
+        } else {
+            Yii::app()->user->setFlash('failed', 'متاسفانه در نمایش مشکلی بوجود آمده است! لطفا مجددا تلاش فرمایید.');
             $this->redirect($model->getViewUrl());
+        }
     }
 
     /**

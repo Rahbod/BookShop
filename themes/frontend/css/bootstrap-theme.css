@@ -3642,3 +3642,10 @@ input[type="checkbox"] + label:hover::before {
 .cart .transaction-details{
     margin-top: 80px;
 }
+.book-buttons{
+    display: table;
+}
+.book-buttons > *{
+    display: table-cell;
+    width: 1%;
+}
