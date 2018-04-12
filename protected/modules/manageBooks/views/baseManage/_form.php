@@ -84,8 +84,9 @@
 
     <div class="row">
 		<?php echo $form->labelEx($model,'allow_download'); ?>
-		<?php echo $form->checkBox($model,'allow_download'); ?>
+		<?php echo $form->checkBox($model,'allow_download', array('value'=>1)); ?>
 		<?php echo $form->error($model,'allow_download'); ?>
+        <div class="description"><small>در صورتی که اجازه دانلود داده شود، فایل کتاب پس از خرید در اختیار کاربر قرار خواهد گرفت.</small></div>
 	</div>
 
 

@@ -162,14 +162,14 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                                 <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
                                             </h5>
                                             <h5 class="price">
-                                                <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
+                                                <?= $model->offPrice!=0?CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان'):'رایگان' ?>
                                                 <?php if($model->lastPackage->sale_printed):?>
                                                     <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
                                                 <?php endif;?>
                                             </h5>
                                         <? else:?>
                                             <h5 class="price">
-                                                <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
+                                                <?= $model->price!=0?CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان'):'رایگان' ?>
                                                 <?php if($model->lastPackage->sale_printed):?>
                                                     <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
                                                 <?php endif;?>
@@ -193,8 +193,18 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                                 <a href="<?php echo $this->createUrl('/book/buy', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>افزودن به کتابخانه</a>
                                             <?php endif;?>
                                         <?php else:?>
+                                            <?php if($model->allow_download):?>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="add-to-library-icon"></i>دانلود کتاب</a>
+                                                </div>
+                                            <?php else:?>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <a href="<?php echo $this->createUrl('/book/reading', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-green"><i class="add-to-library-icon"></i>نمایش کتاب</a>
+                                                </div>
+                                            <?php endif;?>
+
                                             <?php if($model->lastPackage->sale_printed):?>
-                                                <div class="buttons">
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                                     <?php echo CHtml::beginForm(array("/shop/cart/add"));?>
                                                     <?php echo CHtml::hiddenField("book_id", $model->id);?>
                                                     <?php echo CHtml::hiddenField("qty", 1);?>
@@ -234,11 +244,11 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                         ?>
                                         <h5 class="price text-danger">
                                         <span class="<?= $model->discount->hasPriceDiscount()?'text-line-through':'' ?>">
-                                        <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?></span>
+                                        <?= $model->price!=0?CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان'):'رایگان' ?></span>
                                             <small> / <span class="<?= $model->discount->hasPrintedPriceDiscount()?'text-line-through':'' ?>"><?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></span></small>
                                         </h5>
                                         <h5 class="price">
-                                            <?= CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان') ?>
+                                            <?= $model->offPrice!=0?CHtml::encode(Controller::parseNumbers(number_format($model->offPrice)).' تومان'):'رایگان' ?>
                                             <?php if($model->lastPackage->sale_printed):?>
                                                 <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->off_printed_price)).' تومان') ?></small>
                                             <?php endif;?>
@@ -247,7 +257,7 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                     else:
                                         ?>
                                         <h5 class="price">
-                                            <?= CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان') ?>
+                                            <?= $model->price!=0?CHtml::encode(Controller::parseNumbers(number_format($model->price)).' تومان'):"رایگان" ?>
                                             <?php if($model->lastPackage->sale_printed):?>
                                                 <small> / <?= CHtml::encode('نسخه چاپی '.Controller::parseNumbers(number_format($model->printed_price)).' تومان') ?></small>
                                             <?php endif;?>

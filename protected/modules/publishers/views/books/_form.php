@@ -32,6 +32,12 @@
                 <?php echo $form->error($model,'title'); ?>
             </div>
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <?php echo $form->checkBox($model,'allow_download', array('placeholder'=>$model->getAttributeLabel('title'),'class'=>'form-control', 'value' => 1)); ?>
+                <?php echo $form->error($model,'allow_download'); ?>
+                <div class="description"><small>در صورتی که اجازه دانلود داده شود، فایل کتاب پس از خرید در اختیار کاربر قرار خواهد گرفت.</small></div>
+            </div>
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?php echo $form->textField($model,'language',array('placeholder'=>$model->getAttributeLabel('language').' *','maxlength'=>20,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'language'); ?>
             </div>

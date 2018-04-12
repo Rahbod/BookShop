@@ -9,7 +9,7 @@ class BookController extends Controller
     public static function actionsType()
     {
         return array(
-            'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'apiVerify' ,'updateVersion') ,
+            'frontend' => array('discount' ,'tag' ,'search' ,'view' ,'download' ,'publisher' ,'buy' ,'bookmark' ,'rate' ,'verify' ,'apiVerify' ,'updateVersion' ,'reading') ,
             'backend' => array('reportSales' ,'reportIncome','reportBookSales')
         );
     }
@@ -20,7 +20,7 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + reportSales, reportIncome, reportBookSales, reportCreditBuys, buy, bookmark, rate, verify, updateVersion' ,
+            'checkAccess + reportSales, reportIncome, reportBookSales, reportCreditBuys, buy, bookmark, rate, verify, updateVersion, reading' ,
             'postOnly + bookmark' ,
         );
     }
@@ -477,6 +477,28 @@ class BookController extends Controller
         header('Connection: close');
         echo readfile($fileName);
         exit();
+    }
+
+    /**
+     * View Book file on web
+     * @param $id
+     * @param $title
+     * @throws CHttpException
+     */
+    public function actionReading($id, $title)
+    {
+        Yii::app()->theme = 'frontend';
+        $this->layout = '//layouts/viewer';
+        $model = $this->loadModel($id);
+        $criteria = new CDbCriteria(array(
+            'condition' => 'book_id = :book_id And user_id = :user_id',
+            'params' => array(':book_id'=>$model->id, ':user_id' => Yii::app()->user->getId())
+        ));
+        $bought = Library::model()->find($criteria);
+        if($bought){
+            $this->render('book_reader', compact('model'));
+        }else
+            $this->redirect($model->getViewUrl());
     }
 
     /**
