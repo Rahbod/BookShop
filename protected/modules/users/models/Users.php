@@ -11,6 +11,7 @@
  * @property string $role_id
  * @property string $create_date
  * @property string $status
+ * @property string $mobile
  * @property string $verification_token
  * @property integer $change_password_request_count
  * @property integer $auth_mode
@@ -60,26 +61,28 @@ class Users extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('email, password', 'required', 'on' => 'insert,create'),
+            array('mobile, password', 'required', 'on' => 'insert,create'),
             array('role_id', 'default', 'value' => 1),
             array('email', 'required', 'on' => 'email, OAuthInsert'),
-            array('email', 'unique', 'on' => 'insert,create,OAuthInsert'),
+            array('email', 'unique', 'on' => 'OAuthInsert'),
+            array('mobile', 'unique', 'on' => 'insert,create'),
             array('change_password_request_count', 'numerical', 'integerOnly' => true),
-            array('email', 'email'),
+//            array('email', 'email'),
             array('oldPassword ,newPassword ,repeatPassword', 'required', 'on' => 'update'),
             array('password', 'required', 'on' => 'change_password'),
             array('repeatPassword', 'compare', 'compareAttribute' => 'password', 'on' => 'change_password'),
-            array('email', 'filter', 'filter' => 'trim', 'on' => 'create'),
+            array('email, mobile', 'filter', 'filter' => 'trim', 'on' => 'insert,create'),
             array('username, password, verification_token', 'length', 'max' => 100, 'on' => 'create'),
             array('oldPassword', 'oldPass', 'on' => 'update'),
             array('email', 'length', 'max' => 255),
             array('role_id', 'length', 'max' => 10),
+            array('mobile', 'length', 'is' => 11),
             array('status', 'length', 'max' => 8),
             array('create_date', 'length', 'max' => 20),
             array('type', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('type, roleId, create_date, status, verification_token, change_password_request_count ,fa_name ,email ,statusFilter', 'safe', 'on' => 'search'),
+            array('type, mobile, roleId, create_date, status, verification_token, change_password_request_count ,fa_name ,email ,statusFilter', 'safe', 'on' => 'search'),
         );
     }
 
@@ -134,6 +137,7 @@ class Users extends CActiveRecord
             'verification_token' => 'Verification Token',
             'change_password_request_count' => 'تعداد درخواست تغییر کلمه عبور',
             'type' => 'نوع کاربری',
+            'mobile' => 'شماره موبایل',
         );
     }
 
@@ -158,6 +162,7 @@ class Users extends CActiveRecord
         $criteria->compare('username', $this->username, true);
         $criteria->compare('status', $this->statusFilter, true);
         $criteria->compare('role_id', $this->role_id);
+        $criteria->compare('mobile', $this->mobile, true);
         $criteria->addSearchCondition('userDetails.fa_name', $this->fa_name);
         $criteria->with = array('userDetails');
         $criteria->order = 'status ,t.id DESC';
@@ -299,8 +304,5 @@ class Users extends CActiveRecord
             ->from('{{sessions}}')
             ->where("user_type = 'user' AND user_id = {$this->id}")
             ->queryScalar();
-    }
-    public function getFullName(){
-
     }
 }

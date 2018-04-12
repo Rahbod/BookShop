@@ -7,6 +7,8 @@
  */
 class UserLoginForm extends CFormModel
 {
+    public $verification_field_value;
+    public $verification_field;
 	public $username;
 	public $email;
 	public $password;
@@ -28,16 +30,45 @@ class UserLoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('email, password', 'required', 'except' => 'OAuth'),
-			array('email ,OAuth', 'required', 'on' => 'OAuth'),
-			// rememberMe needs to be a boolean
-			array('rememberMe', 'boolean'),
-			array('email', 'email'),
+            array('verification_field_value, password', 'required' ,'except' => 'OAuth'),
+            array('email ,OAuth', 'required' ,'on' => 'OAuth'),
+            // rememberMe needs to be a boolean
+            array('rememberMe', 'boolean'),
+            array('email', 'email', 'on' => 'OAuth'),
+            array('verification_field_value', 'email', 'on' => 'emailAuth'),
+            array('verification_field_value', 'numerical', 'integerOnly' => true, 'on' => 'mobileAuth, nationalAuth'),
+            array('verification_field_value', 'length', 'is' => 10, 'on' => 'nationalAuth'),
+            array('verification_field_value', 'length', 'is' => 11, 'on' => 'mobileAuth'),
+            // multiple username
+            array('verification_field_value, verification_field', 'safe'),
+            array('verification_field_value', 'check', 'fields' => ['mobile', 'email']),
+            // authenticate_field needs to be authenticated
+            array('authenticate_field', 'authenticate','except' => 'OAuth'),
 			array('name, pic', 'safe', 'on' => 'OAuth'),
-			// authenticate_field needs to be authenticated
-			array('authenticate_field', 'authenticate', 'except' => 'OAuth'),
 		);
 	}
+
+    public function check($attribute, $params)
+    {
+        $criteria = new CDbCriteria();
+        $criteria->compare('email', $this->{$attribute});
+        $criteria->limit = 1;
+        $email = Users::model()->find($criteria);
+        if($email){
+            $this->email = $email->email;
+            $this->verification_field = 'email';
+            $this->scenario = 'emailAuth';
+        }else{
+            $criteria = new CDbCriteria();
+            $criteria->compare('mobile', $this->{$attribute});
+            $criteria->limit = 1;
+            $mobile = Users::model()->find($criteria);
+            if($mobile){
+                $this->verification_field = 'mobile';
+                $this->scenario = 'mobileAuth';
+            }
+        }
+    }
 
 	/**
 	 * Declares attribute labels.
@@ -45,11 +76,12 @@ class UserLoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'username' => 'نام کاربری',
-			'password' => 'کلمه عبور',
-			'rememberMe' => 'مرا بخاطر بسپار',
-			'email' => 'پست الکترونیک',
-			'authenticate_field' => 'Authenticate Field'
+            'username' => 'نام کاربری',
+            'password' => 'کلمه عبور',
+            'rememberMe'=>'مرا بخاطر بسپار',
+            'email' => 'پست الکترونیک',
+            'authenticate_field' => 'Authenticate Field',
+            'verification_field_value' => 'شماره موبایل یا پست الکترونیکی',
 		);
 	}
 
@@ -60,10 +92,10 @@ class UserLoginForm extends CFormModel
 	public function authenticate($attribute, $params)
 	{
 		if(!$this->hasErrors()){
-			if($this->OAuth)
-				$this->_identity = new UserIdentity($this->email, null, $this->OAuth);
-			else
-				$this->_identity = new UserIdentity($this->email, $this->password);
+            if($this->OAuth)
+                $this->_identity = new UserIdentity($this->verification_field_value,null,$this->OAuth);
+            else
+                $this->_identity = new UserIdentity($this->verification_field_value,$this->password,null,$this->verification_field);
 			if(!$this->_identity->authenticate()){
 				if($this->_identity->errorCode === 3){
 					if($this->scenario == 'app_login')
@@ -75,7 +107,7 @@ class UserLoginForm extends CFormModel
 				elseif($this->_identity->errorCode === 5)
 					$this->addError($attribute, 'این حساب کاربری حذف شده است.');
 				else
-					$this->addError($attribute, 'پست الکترونیک یا کلمه عبور اشتباه است .');
+					$this->addError($attribute, $this->verification_field == 'mobile'?'پست الکترونیک یا کلمه عبور اشتباه است .':'شماره موبایل یا کلمه عبور اشتباه است .');
 			}
 		}
 	}
@@ -91,9 +123,9 @@ class UserLoginForm extends CFormModel
 			$this->_identity = null;
 		if($this->_identity === null){
 			if($this->OAuth)
-				$this->_identity = new UserIdentity($this->email, null, $this->OAuth);
+				$this->_identity = new UserIdentity($this->verification_field_value, null, $this->OAuth);
 			else
-				$this->_identity = new UserIdentity($this->email, $this->password);
+				$this->_identity = new UserIdentity($this->verification_field_value, $this->password,null,$this->verification_field);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode === UserIdentity::ERROR_NONE){
@@ -132,7 +164,7 @@ class UserLoginForm extends CFormModel
 		elseif($this->_identity->errorCode === 5)
 			return 'این حساب کاربری حذف شده است.';
 		else
-			return 'پست الکترونیک یا کلمه عبور اشتباه است .';
+			return $this->verification_field == 'email'?'پست الکترونیک یا کلمه عبور اشتباه است .':'شماره موبایل یا کلمه عبور اشتباه است .';
 	}
 
 

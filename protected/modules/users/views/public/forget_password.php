@@ -1,3 +1,6 @@
+<?php
+/**@var $this UsersPublicController */
+?>
 <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
     <h4 class="welcome-text">بازیابی کلمه عبور<small> ، لطفا پست الکترونیکی خود را وارد کنید.</small></h4>
     <div class="login-form">
@@ -9,7 +12,7 @@
         <div class="alert alert-success hidden" id="message"></div>
 
         <div class="form-row">
-            <?php echo CHtml::textField('email', '',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
+            <?php echo CHtml::textField($this->verification_field, '',array('class'=>'form-control','placeholder'=>(new Users())->getAttributeLabel($this->verification_field))); ?>
         </div>
         <div class="form-row">
             <?php echo CHtml::ajaxSubmitButton('ارسال', Yii::app()->createUrl('/users/public/forgetPassword'), array(

@@ -1,4 +1,5 @@
 <?php
+/* @var $this UsersPublicController */
 /* @var $model Users */
 /* @var $form CActiveForm */
 ?>
@@ -24,8 +25,8 @@
             ),
         )); ?>
         <div class="form-row">
-            <?php echo $form->textField($model,'email',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
-            <?php echo $form->error($model,'email'); ?>
+            <?php echo $form->textField($model,$this->verification_field,array('class'=>'form-control','placeholder'=>$model->getAttributeLabel($this->verification_field))); ?>
+            <?php echo $form->error($model,$this->verification_field); ?>
             <span class="transition icon-envelope"></span>
         </div>
         <div class="form-row">

@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /**
  * UserIdentity represents the data needed to identity a user.
@@ -66,7 +66,7 @@ class GoogleOAuth extends CComponent
     }
 
     /**
-     * @param $model
+     * @param $model UserLoginForm
      * @throws CHttpException
      */
     public function login($model)

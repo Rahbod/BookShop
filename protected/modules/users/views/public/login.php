@@ -36,8 +36,8 @@
         </div>
 
         <div class="form-row">
-            <?php echo $form->textField($model,'email',array('class'=>'form-control','placeholder'=>'پست الکترونیکی')); ?>
-            <?php echo $form->error($model,'email'); ?>
+            <?php echo $form->textField($model, 'verification_field_value', array('class' => 'ltr text-right form-control', 'placeholder' => 'شماره موبایل')); ?>
+            <?php echo $form->error($model, 'verification_field_value'); ?>
             <span class="transition icon-envelope"></span>
         </div>
         <div class="form-row">

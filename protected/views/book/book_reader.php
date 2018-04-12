@@ -5,6 +5,7 @@
 
 $previewPath = Yii::getPathOfAlias("webroot") . "/uploads/books/previews/";
 $filePath = Yii::getPathOfAlias("webroot") . "/uploads/books/files/";
+$msg = 'متاسفانه در نمایش مشکلی بوجود آمده است! لطفا مجددا تلاش فرمایید.';
 
 $baseUrl = Yii::app()->theme->baseUrl.'/plugins';
 $cs = Yii::app()->clientScript;
@@ -14,6 +15,10 @@ if(isset($_GET['preview']) && is_file($previewPath.$model->preview_file)){
     $url = Yii::app()->getBaseUrl(true).'/uploads/books/previews/'.$model->preview_file;
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
     $view = true;
+    if($ext == 'pdf'){
+        $msg = 'بخش نمایش فایل PDF در دست انجام است، لطفا بعدا مراجعه فرمایید.';
+        $view = false;
+    }
 }else {
     $package = $model->lastPackage;
     if ($package->epub_file_name && is_file($filePath . pathinfo($package->epub_file_name, PATHINFO_FILENAME) . '.epub')) {
@@ -23,8 +28,10 @@ if(isset($_GET['preview']) && is_file($previewPath.$model->preview_file)){
     } elseif ($package->pdf_file_name && is_file($filePath . pathinfo($package->pdf_file_name, PATHINFO_FILENAME) . '.pdf')) {
         $url = Yii::app()->baseUrl . '/uploads/books/files/' . pathinfo($package->pdf_file_name, PATHINFO_FILENAME) . '.pdf';
         $ext = 'pdf';
-
-    }
+//        $view = true;
+        $msg = 'بخش نمایش فایل PDF در دست انجام است، لطفا بعدا مراجعه فرمایید.';
+    }else
+        $msg = 'فایل کتاب ناقص است، لطفا با بخش پشتیبانی تماس حاصل فرمایید.';
 }
 ?>
 <?php
@@ -109,6 +116,6 @@ if($view):
     <?php
     endif;
 else:
-    Yii::app()->user->setFlash('failed','متاسفانه در نمایش مشکلی بوجود آمده است! لطفا مجددا تلاش فرمایید.');
+    Yii::app()->user->setFlash('failed',$msg);
     $this->redirect($model->getViewUrl());
 endif;
