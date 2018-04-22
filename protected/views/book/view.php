@@ -226,7 +226,8 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                 <div class="buttons book-buttons">
                                     <?php if($buttons):?>
                                         <?php
-                                        echo $bought?$model->downloadOrViewLink():$model->addToLibraryLink();
+//                                        echo $bought?$model->downloadOrViewLink():$model->addToLibraryLink();
+                                        echo $model->addToLibraryLink();
                                         /*else:
                                             if($bought->package_id):
                                                 if($bought->package_id != $model->lastPackage->id):

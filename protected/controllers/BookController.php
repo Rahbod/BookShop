@@ -500,7 +500,8 @@ class BookController extends Controller
                 $this->render('book_reader', compact('model'));
             else
                 $this->redirect($model->getDownloadUrl(true));
-        }
+        }else // redirect to view book
+            $this->redirect($model->getViewUrl());
 
         $criteria = new CDbCriteria(array(
             'condition' => 'book_id = :book_id And user_id = :user_id',
