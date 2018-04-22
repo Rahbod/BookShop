@@ -1,0 +1,38 @@
+@font-face {
+  font-family: 'IRANSans-web';
+  src: url('../font/IRANSans-web.ttf')  format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'fidibo_badr';
+  src: url('../font/badr.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'fidibo_nazanin';
+  src: url('../font/nazanin.ttf') format('truetype');
+  font-weight: normal;
+}
+
+
+body{font-family: 'IRANSans-web'; line-height: 2.4em;}
+p,div,span{text-align: justify;}
+
+
+
+h1,h2{
+  line-height: 1.1em;
+  font-size: 120%;
+}
+
+h3,h4{
+  line-height: 1.1em;
+  font-size: 110%;
+}
+
+h5,h6{
+  line-height: 1.1em;
+  font-size: 100%;
+}
