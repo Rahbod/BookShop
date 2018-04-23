@@ -34,13 +34,11 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
 //    }else
 //        $msg = 'فایل کتاب ناقص است، لطفا با بخش پشتیبانی تماس حاصل فرمایید.';
 //}
-?>
-<?php
-if ($view):
-    if ($ext == 'pdf'):
+if ($view) {
+    if ($ext == 'pdf') {
 
 
-    elseif ($ext == 'epub'):
+    } elseif ($ext == 'epub') {
         ?>
         <div id="main" class="">
             <div id="prev" class="arrow">&#xe902;</div>
@@ -69,7 +67,6 @@ if ($view):
                     </div>
                 </div>
             </div>
-
             <div id="container">
                 <div id="header">
                     <div id="logo">
@@ -138,7 +135,6 @@ if ($view):
                         </ul>
                     </div>
                 </div>
-
                 <div id="footer">
                     <a href="<?= $this->createUrl('/apps') ?>" target="_blank" id="platforms"><img
                                 src="<?= "$baseUrl/$ext-reader/img/platforms.png" ?>"></a>
@@ -151,7 +147,6 @@ if ($view):
                 </div>
             </div>
         </div>
-
         <script>
             'use strict';
             var reader = null;
@@ -178,9 +173,9 @@ if ($view):
                 reader = new EPUBJS.Reader(bookPath, settings);
             });
         </script>
-    <?php
-    endif;
-else:
+        <?php
+    }
+}else {
     Yii::app()->user->setFlash('failed', $msg);
     $this->redirect($model->getViewUrl());
-endif;
+}
