@@ -19,7 +19,8 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
         $msg = 'بخش نمایش فایل PDF در دست انجام است، لطفا بعدا مراجعه فرمایید.';
         $view = false;
     }
-}
+} echo 'sad';
+/*
 //else {
 //    $package = $model->lastPackage;
 //    if ($package->epub_file_name && is_file($filePath . pathinfo($package->epub_file_name, PATHINFO_FILENAME) . '.epub')) {
@@ -178,4 +179,4 @@ if ($view) {
 }else {
     Yii::app()->user->setFlash('failed', $msg);
     $this->redirect($model->getViewUrl());
-}
+}*/?>

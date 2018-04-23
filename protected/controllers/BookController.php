@@ -496,8 +496,10 @@ class BookController extends Controller
         $model = $this->loadModel($id);
 
         if(isset($_GET['preview'])){
-            if(!$model->allow_download)
+            if(!$model->allow_download) {
                 $this->render('book_reader', compact('model'));
+                Yii::app()->end();
+            }
             else
                 $this->redirect($model->getDownloadUrl(true));
         }else // redirect to view book
