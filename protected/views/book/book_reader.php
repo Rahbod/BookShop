@@ -19,8 +19,7 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
         $msg = 'بخش نمایش فایل PDF در دست انجام است، لطفا بعدا مراجعه فرمایید.';
         $view = false;
     }
-} echo 'sad';
-/*
+}
 //else {
 //    $package = $model->lastPackage;
 //    if ($package->epub_file_name && is_file($filePath . pathinfo($package->epub_file_name, PATHINFO_FILENAME) . '.epub')) {
@@ -35,11 +34,11 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
 //    }else
 //        $msg = 'فایل کتاب ناقص است، لطفا با بخش پشتیبانی تماس حاصل فرمایید.';
 //}
-if ($view) {
-    if ($ext == 'pdf') {
+if ($view):
+    if ($ext == 'pdf'):
 
 
-    } elseif ($ext == 'epub') {
+    elseif ($ext == 'epub'):
         ?>
         <div id="main" class="">
             <div id="prev" class="arrow">&#xe902;</div>
@@ -61,7 +60,7 @@ if ($view) {
                                 دانلود اپلیکیشن
                             </a>
 
-                            <a class="btn buy" href="http://ketabrasan.com/basket?add=79813">خرید نسخه کامل</a>
+                            <a class="btn buy" href="<?= $model->addToLibraryLink() ?>">خرید نسخه کامل</a>
 
                         </div>
 
@@ -174,9 +173,9 @@ if ($view) {
                 reader = new EPUBJS.Reader(bookPath, settings);
             });
         </script>
-        <?php
-    }
-}else {
+    <?php
+    endif;
+else:
     Yii::app()->user->setFlash('failed', $msg);
     $this->redirect($model->getViewUrl());
-}*/?>
+endif;
