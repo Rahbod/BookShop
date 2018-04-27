@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword, encrypt, decrypt',
+            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword, encrypt, decrypt, register, resendVerification, verification',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
@@ -81,11 +81,11 @@ class ApiController extends ApiBaseController
                 ];
 
             if ($result)
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'result' => $result]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'result' => $result]));
             else
-                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Query variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Query variable is required.']));
     }
 
     /**
@@ -106,7 +106,7 @@ class ApiController extends ApiBaseController
                     $record = Books::model()->find($criteria);
 
                     if (!$record)
-                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
 
                     Yii::import('users.models.*');
                     Yii::import('comments.models.*');
@@ -194,11 +194,11 @@ class ApiController extends ApiBaseController
             }
 
             if ($book)
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'book' => $book]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'book' => $book]));
             else
-                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity and ID variables is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity and ID variables is required.']));
     }
 
     /**
@@ -265,11 +265,11 @@ class ApiController extends ApiBaseController
             }
 
             if ($list)
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'list' => $list]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'list' => $list]));
             else
-                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Entity variable is required.']));
     }
 
     public function actionPage()
@@ -292,11 +292,11 @@ class ApiController extends ApiBaseController
             }
 
             if ($text)
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'text' => $text]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'text' => $text]));
             else
-                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+                $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']));
     }
 
     public function actionBookmark()
@@ -313,17 +313,17 @@ class ApiController extends ApiBaseController
                 $model->user_id = $this->user->id;
                 if ($model->save()) {
                     $book = Books::model()->findByPk($this->request['book_id']);
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'کتاب "' . $book->title . '" با موفقیت نشان شد.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'کتاب "' . $book->title . '" با موفقیت نشان شد.']));
                 } else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']));
             } else {
                 if (UserBookBookmark::model()->deleteAllByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id'])))
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'عملیات با موفقیت انجام شد.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'عملیات با موفقیت انجام شد.']));
                 else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در انجام عملیات خطایی رخ داده است!']));
             }
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID variable is required.']));
     }
 
     public function actionBookmarkList()
@@ -338,9 +338,9 @@ class ApiController extends ApiBaseController
             ];
 
         if ($list)
-            $this->_sendResponse(200, CJSON::encode(['status' => true, 'list' => $list]), 'application/json');
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'list' => $list]));
         else
-            $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+            $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
     }
 
     public function actionComment()
@@ -367,7 +367,7 @@ class ApiController extends ApiBaseController
             $criteria->params[':time'] = time() - 30;
             $model = Comment::model()->find($criteria);
             if ($model)
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'تا 30 ثانیه دیگر امکان ثبت نظر وجود ندارد.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'تا 30 ثانیه دیگر امکان ثبت نظر وجود ندارد.']));
             else {
                 if ($comment->save()) {
                     if (isset($this->request['rate'])) {
@@ -381,12 +381,12 @@ class ApiController extends ApiBaseController
                         @$rateModel->save();
                     }
 
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'نظر شما با موفقیت ثبت شد.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'نظر شما با موفقیت ثبت شد.']));
                 } else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در عملیات ثبت خطایی رخ داده است! لطفا مجددا تلاش کنید.']));
             }
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Text variables is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Text variables is required.']));
     }
 
     public function actionDiscount()
@@ -399,16 +399,16 @@ class ApiController extends ApiBaseController
             $discount = DiscountCodes::model()->find($criteria);
             /* @var $discount DiscountCodes */
             if ($discount === NULL)
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر موجود نیست.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر موجود نیست.']));
 
             if (!$discount->digital_allow)
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر مربوط به خرید نسخه چاپی می باشد.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر مربوط به خرید نسخه چاپی می باشد.']));
 
             if ($discount->limit_times && $discount->usedCount() >= $discount->limit_times)
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'محدودیت تعداد استفاده از کد تخفیف مورد نظر به اتمام رسیده است.']));
 
             if ($discount->user_id && $discount->user_id != $this->user->id)
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر نامعتبر است.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'کد تخفیف مورد نظر نامعتبر است.']));
 
             /* @var $used DiscountUsed */
             $used = $discount->codeUsed(array(
@@ -419,16 +419,16 @@ class ApiController extends ApiBaseController
 
             if ($used) {
                 $u_date = JalaliDate::date('Y/m/d - H:i', $used->date);
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است."]), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => "کد تخفیف مورد نظر قبلا در تاریخ {$u_date} استفاده شده است."]));
             }
 
             $this->_sendResponse(200, CJSON::encode(['status' => true, 'discount' => [
                 'id' => intval($discount->id),
                 'offType' => $discount->off_type == 1 ? 'percent' : 'amount',
                 'off' => $discount->off_type == 1 ? floatval($discount->percent) : doubleval($discount->amount)
-            ]]), 'application/json');
+            ]]));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']));
     }
 
     public function actionBuy()
@@ -445,7 +445,7 @@ class ApiController extends ApiBaseController
                     'code' => 600,
                     'type' => 'both',
                     'message' => 'این کتاب در کتابخانه ی شما موجود است.'
-                ]]), 'application/json');
+                ]]));
 
             // price with publisher discount or not
             $basePrice = $model->hasDiscount() ? $model->offPrice : $model->price;
@@ -476,7 +476,7 @@ class ApiController extends ApiBaseController
                                 'code' => 610,
                                 'type' => 'credit',
                                 'message' => 'اعتبار فعلی شما کافی نیست!'
-                            ]]), 'application/json');
+                            ]]));
 
                         $userDetails = UserDetails::model()->findByAttributes(array('user_id' => $userID));
                         $userDetails->setScenario('update-credit');
@@ -492,14 +492,14 @@ class ApiController extends ApiBaseController
                                 'code' => 611,
                                 'type' => 'credit',
                                 'message' => 'خرید شما با موفقیت انجام شد.'
-                            ]]), 'application/json');
+                            ]]));
                         } else
                             $this->_sendResponse(400, CJSON::encode(['status' => false, 'result' => [
                                 'hasError' => true,
                                 'code' => 612,
                                 'type' => 'credit',
                                 'message' => 'در انجام عملیات خرید خطایی رخ داده است.'
-                            ]]), 'application/json');
+                            ]]));
                     } elseif ($this->request['payment_method'] == 'gateway') {
                         // Save payment
                         $transaction = new UserTransactions();
@@ -528,14 +528,14 @@ class ApiController extends ApiBaseController
                                     'code' => 620,
                                     'type' => 'gateway',
                                     'url' => $gateway->getRedirectUrl()
-                                ]]), 'application/json');
+                                ]]));
                             else
                                 $this->_sendResponse(400, CJSON::encode(['status' => false, 'result' => [
                                     'hasError' => true,
                                     'code' => 621,
                                     'type' => 'gateway',
                                     'message' => 'خطای بانکی: ' . $result->getError()
-                                ]]), 'application/json');
+                                ]]));
                         }
                     }
                 } else {
@@ -548,7 +548,7 @@ class ApiController extends ApiBaseController
                         'code' => 601,
                         'type' => 'both',
                         'message' => 'خرید شما با موفقیت انجام شد.'
-                    ]]), 'application/json');
+                    ]]));
                 }
             } else
                 $this->_sendResponse(400, CJSON::encode(['status' => false, 'result' => [
@@ -556,9 +556,9 @@ class ApiController extends ApiBaseController
                     'code' => 602,
                     'type' => 'both',
                     'message' => 'شما ناشر این کتاب هستید. امکان خرید وجود ندارد.'
-                ]]), 'application/json');
+                ]]));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Payment Method variables is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Book ID and Payment Method variables is required.']));
     }
 
     /**
@@ -676,7 +676,7 @@ class ApiController extends ApiBaseController
             'address' => $this->user->userDetails->address,
             'bookmarked' => $bookmarked,
             'library' => $library,
-        ]]), 'application/json');
+        ]]));
     }
 
     public function actionEditProfile()
@@ -693,7 +693,7 @@ class ApiController extends ApiBaseController
 
             foreach ($profileFields as $field)
                 if (!key_exists($field, $profile))
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The ' . $field . ' variable does not exist in the Profile array.']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The ' . $field . ' variable does not exist in the Profile array.']));
 
             /* @var $detailsModel UserDetails */
             $detailsModel = UserDetails::model()->findByAttributes(array('user_id' => $this->user->id));
@@ -704,11 +704,11 @@ class ApiController extends ApiBaseController
             $detailsModel->zip_code = $profile['zip_code'];
             $detailsModel->address = $profile['address'];
             if ($detailsModel->save())
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'اطلاعات با موفقیت ثبت شد.']), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'اطلاعات با موفقیت ثبت شد.']));
             else
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Profile variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Profile variable is required.']));
     }
 
     public function actionCreditPrices()
@@ -719,9 +719,9 @@ class ApiController extends ApiBaseController
             return doubleval($item);
         }, json_decode($prices->value));
         if ($prices)
-            $this->_sendResponse(200, CJSON::encode(['status' => true, 'prices' => $prices]), 'application/json');
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'prices' => $prices]));
         else
-            $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']), 'application/json');
+            $this->_sendResponse(404, CJSON::encode(['status' => false, 'message' => 'نتیجه ای یافت نشد.']));
     }
 
     public function actionCredit()
@@ -744,13 +744,13 @@ class ApiController extends ApiBaseController
                 $model->save();
                 //Redirect to URL You can do it also by creating a form
                 if ($result->getStatus() == 100)
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $gateway->getRedirectUrl()]), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $gateway->getRedirectUrl()]));
                 else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'خطای بانکی: ' . $result->getError()]), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'خطای بانکی: ' . $result->getError()]));
             } else
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Amount variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Amount variable is required.']));
     }
 
     public function actionBin()
@@ -777,13 +777,13 @@ class ApiController extends ApiBaseController
                         'status' => true,
                         'message' => CHtml::encode($bon->title) . ' با موفقیت اعمال گردید و مبلغ ' . Controller::parseNumbers(number_format($bon->amount)) . ' تومان به اعتبار شما اضافه شد.',
                         'credit' => intval($creditModel->credit),
-                    ]), 'application/json');
+                    ]));
                 } else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']));
             } else
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => $voucherForm->getError('code')]), 'application/json');
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => $voucherForm->getError('code')]));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Code variable is required.']));
     }
 
     public function actionIndex()
@@ -796,7 +796,7 @@ class ApiController extends ApiBaseController
                 'dynamic' => $this->getRow('dynamic'),
             ],
             'ads' => $this->getAds()
-        ]]), 'application/json');
+        ]]));
     }
 
     public function actionRow()
@@ -814,7 +814,7 @@ class ApiController extends ApiBaseController
                 if (isset($this->request['title']))
                     $title = $this->request['title'];
                 else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Title variable is required.']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Title variable is required.']));
             }
 
             $books = $this->getRow($this->request['name'], $limit, $title);
@@ -822,9 +822,9 @@ class ApiController extends ApiBaseController
             if ($this->request['name'] == 'dynamic')
                 $books = $books[0]['books'];
 
-            $this->_sendResponse(200, CJSON::encode(['status' => true, 'books' => $books]), 'application/json');
+            $this->_sendResponse(200, CJSON::encode(['status' => true, 'books' => $books]));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Name variable is required.']));
     }
 
     public function actionDownload()
@@ -844,7 +844,7 @@ class ApiController extends ApiBaseController
                 $model->setScenario('update-download');
                 $model->save();
 
-                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]));
             } else {
                 //$buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
                 //if($buy)
@@ -863,12 +863,12 @@ class ApiController extends ApiBaseController
                     $lib->download_status = Library::STATUS_DOWNLOADED;
                     $lib->save();
 
-                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]));
                 } else
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما اجازه دسترسی به این فایل را ندارید.']), 'application/json');
+                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'شما اجازه دسترسی به این فایل را ندارید.']));
             }
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'BookID variable is required.']), 'application/json');
+            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'BookID variable is required.']));
     }
 
     public function actionDownloadFile()
@@ -1011,82 +1011,133 @@ class ApiController extends ApiBaseController
 
     public function actionForgetPassword()
     {
-        if (isset($this->request['email'])) {
-            $model = Users::model()->findByAttributes(array('email' => $this->request['email']));
+        if (isset($this->request[Users::$verification_field])) {
+            $model = Users::model()->findByAttributes(array(Users::$verification_field => $this->request[Users::$verification_field]));
             if ($model) {
                 if ($model->status == 'active') {
                     if ($model->change_password_request_count != 3) {
-                        $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date . '#' . time());
-                        $count = intval($model->change_password_request_count);
-                        $model->updateByPk($model->id, array('verification_token' => $token, 'change_password_request_count' => $count + 1));
-                        $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>بنا به درخواست شما جهت تغییر کلمه عبور لینک زیر خدمتتان ارسال گردیده است.</div>';
-                        $message .= '<div style="text-align: right;font-size: 9pt;">';
-                        $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '</a>';
-                        $message .= '</div>';
-                        $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">اگر شخص دیگری غیر از شما این درخواست را صادر نموده است، یا شما کلمه عبور خود را به یاد آورده‌اید و دیگر نیازی به تغییر آن ندارید، کلمه عبور قبلی/موجود شما همچنان فعال می‌باشد و می توانید از طریق <a href="' . ((strpos($_SERVER['SERVER_PROTOCOL'], 'https')) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/login">این صفحه</a> وارد حساب کاربری خود شوید.</div>';
-                        $result = Mailer::mail($model->email, 'درخواست تغییر کلمه عبور در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
-                        if ($result)
-                            $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'لینک تغییر کلمه عبور به ' . $model->email . ' ارسال شد.']), 'application/json');
-                        else
-                            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'در ارسال ایمیل خطایی رخ داده است لطفا مجددا تلاش کنید.']), 'application/json');
+                        if (Users::$verification_field == 'email') {
+                            $token = md5($model->id . '#' . $model->password . '#' . $model->email . '#' . $model->create_date . '#' . time());
+                            $count = intval($model->change_password_request_count);
+                            $model->updateByPk($model->id, array('verification_token' => $token, 'change_password_request_count' => $count + 1));
+                            $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>بنا به درخواست شما جهت تغییر کلمه عبور لینک زیر خدمتتان ارسال گردیده است.</div>';
+                            $message .= '<div style="text-align: right;font-size: 9pt;">';
+                            $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/changePassword/token/' . $token . '</a>';
+                            $message .= '</div>';
+                            $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">اگر شخص دیگری غیر از شما این درخواست را صادر نموده است، یا شما کلمه عبور خود را به یاد آورده‌اید و دیگر نیازی به تغییر آن ندارید، کلمه عبور قبلی/موجود شما همچنان فعال می‌باشد و می توانید از طریق <a href="' . ((strpos($_SERVER['SERVER_PROTOCOL'], 'https')) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/login">این صفحه</a> وارد حساب کاربری خود شوید.</div>';
+                            $result = Mailer::mail($model->email, 'درخواست تغییر کلمه عبور در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail'], Yii::app()->params['SMTP']);
+                            if ($result)
+                                $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'لینک تغییر کلمه عبور به ' . $model->email . ' ارسال شد.']));
+                            else
+                                $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'در ارسال ایمیل خطایی رخ داده است لطفا مجددا تلاش کنید.']));
+                        } elseif (Users::$verification_field == 'mobile') {
+                            Yii::import('users.controllers.UsersPublicController');
+                            $result = UsersPublicController::newPasswordSendSms($model);
+                            if ($result->status)
+                                echo CJSON::encode(['status' => $result->status, 'message' => 'کلمه عبور جدید از طریق پیامک برای شما ارسال گردید.']);
+                            else
+                                echo CJSON::encode(['status' => $result->status, 'message' => $result->msg]);
+                        }
                     } else
-                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'بیش از 3 بار نمی توانید درخواست تغییر کلمه عبور بدهید.']), 'application/json');
+                        echo CJSON::encode(array(
+                            'hasError' => true,
+                            'message' => 'بیش از 3 بار نمی توانید درخواست تغییر کلمه عبور بدهید.'
+                        ));
                 } elseif ($model->status == 'pending')
-                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری هنوز فعال نشده است.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری هنوز فعال نشده است.']));
                 elseif ($model->status == 'blocked')
-                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری مسدود می باشد.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری مسدود می باشد.']));
                 elseif ($model->status == 'deleted')
-                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری حذف شده است.']), 'application/json');
+                    $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'این حساب کاربری حذف شده است.']));
             } else
-                $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'پست الکترونیکی وارد شده اشتباه است.']), 'application/json');
-        } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Email variable is required.']), 'application/json');
+                $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'کاربر موردنظر در سیستم ثبت نشده است.']));
+        }
+        $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Phone number is required.']));
     }
 
-    public function actionEncrypt()
+    public function actionRegister()
     {
-        if (isset($this->request['string'])) {
-            $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
-
-            set_time_limit(0);
-
-            $encoder = Yii::app()->phpseclib->createAES();
-            /* @var $encoder Crypt_AES*/
-            $encoder->setKey($privateKey);
-
-            try {
-                $buffer = $this->request['string'];
-                $base = base64_encode($encoder->encrypt($buffer));
-                echo $base;
-            } catch (CException $e) {
-                return false;
-            }
-        } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'String variable is required.']), 'application/json');
+        if (isset($this->request['mobile']) && isset($this->request['password'])) {
+            Yii::import('users.controllers.UsersPublicController');
+            $register = new Users('create');
+            $register->mobile = $this->request['mobile'];
+            $register->password = $this->request['password'];
+            $register->status = 'pending';
+            $register->create_date = time();
+            if ($register->save()) {
+                if (Users::$verification_field == 'email') {
+                    $token = md5($register->id . '#' . $register->password . '#' . $register->email . '#' . $register->create_date);
+                    $register->updateByPk($register->id, array('verification_token' => $token));
+                    $message = '<div style="color: #2d2d2d;font-size: 14px;text-align: right;">با سلام<br>برای فعال کردن حساب کاربری خود در ' . Yii::app()->name . ' بر روی لینک زیر کلیک کنید:</div>';
+                    $message .= '<div style="text-align: right;font-size: 9pt;">';
+                    $message .= '<a href="' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '">' . Yii::app()->getBaseUrl(true) . '/users/public/verify/token/' . $token . '</a>';
+                    $message .= '</div>';
+                    $message .= '<div style="font-size: 8pt;color: #888;text-align: right;">این لینک فقط 3 روز اعتبار دارد.</div>';
+                    Mailer::mail($register->email, 'ثبت نام در ' . Yii::app()->name, $message, Yii::app()->params['noReplyEmail']);
+                    $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا پست الکترونیکی خود را فعال کنید.']));
+                } elseif (Users::$verification_field == 'mobile') {
+                    $result = UsersPublicController::sendVerificationSms($register->mobile);
+                    if ($result->status)
+                        $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'پیامک فعالسازی با موفقیت ارسال گردید.']));
+                    else
+                        $this->_sendResponse(200, CJSON::encode(['status' => $result->status, 'message' => $result->msg]));
+                }
+            }else
+                $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => $this->implodeErrors($register)]));
+            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'در انجام فرآیند ثبت نام مشکلی به وجود آمده است.']));
+        }else
+            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'شماره تلفن یا کلمه عبور وارد نشده است.']));
     }
 
-    public function actionDecrypt()
+
+    public function actionResendVerification($mobile = null)
     {
-        if (isset($this->request['string'])) {
-            $privateKey = file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private.key');
-
-            set_time_limit(0);
-
-            $encoder = Yii::app()->phpseclib->createAES();
-            /* @var $encoder Crypt_AES*/
-            $encoder->setKey($privateKey);
-
-            try {
-                $buffer = $this->request['string'];
-                $base = $encoder->decrypt(base64_decode($buffer));
-//                file_put_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test_decoded2.pdf', $base);
-//                echo mb_convert_encoding(file_get_contents(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'test_decoded2.pdf'), 'utf8');
-//                header('content-type: application/pdf;');
-                echo $base;
-            } catch (CException $e) {
-                return false;
-            }
+        if (Users::$verification_field == 'mobile' && $mobile) {
+            Yii::import('users.controllers.UsersPublicController');
+            $result = UsersPublicController::sendVerificationSms($mobile);
+            if ($result->status)
+                $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'پیامک فعالسازی با موفقیت ارسال گردید.']));
+            else
+                $this->_sendResponse(200, CJSON::encode(['status' => $result->status, 'message' => $result->msg]));
         } else
-            $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'String variable is required.']), 'application/json');
+            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'شماره تلفن ارسال نشده است.']));
+    }
+
+    public function actionVerification()
+    {
+        if (Users::$verification_field == 'mobile' && isset($this->request['mobile'])) {
+            $mobile = $this->request['mobile'];
+            $model = Users::model()->findByAttributes(['mobile' => $mobile]);
+            if ($model) {
+                if (isset($this->request['code'])) {
+                    $code = $this->request['code'];
+                    if ($model->status == 'pending') {
+                        if (empty($code) || $code != $model->verification_token)
+                            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'کد فعالسازی نامعتبر است.']));
+
+                        $model->updateByPk($model->id, array('status' => 'active'));
+                        $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'حساب کاربری شما فعال گردید.']));
+                    } elseif ($model->status == 'active')
+                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'حساب کاربری شما قبلا فعال شده است.']));
+                    else
+                        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'امکان فعال سازی این کاربر وجود ندارد. لطفا مجددا ثبت نام کنید.']));
+                }
+            }
+            $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'شماره تلفن ارسالی در سیستم ثبت نشده است.']));
+        }
+        $this->_sendResponse(200, CJSON::encode(['status' => false, 'message' => 'شماره تلفن ارسال نشده است.']));
+    }
+
+    /**
+     * @param $model CActiveRecord
+     * @return string
+     */
+    public function implodeErrors($model)
+    {
+        $errors = '';
+        foreach ($model->getErrors() as $err) {
+            $errors .= implode('<br>', $err) . '<br>';
+        }
+        return $errors;
     }
 }

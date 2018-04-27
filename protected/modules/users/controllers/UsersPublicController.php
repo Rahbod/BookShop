@@ -27,7 +27,6 @@ class UsersPublicController extends Controller
                 'ResendVerification',
                 'upload',
                 'deleteUpload',
-                'smsResend',
             )
         );
     }
@@ -248,7 +247,7 @@ class UsersPublicController extends Controller
                                     'message' => 'در انجام عملیات خطایی رخ داده است لطفا مجددا تلاش کنید.'
                                 ));
                         } elseif (Users::$verification_field == 'mobile') {
-                            $result = $this->newPasswordSendSms($model);
+                            $result = self::newPasswordSendSms($model);
                             if ($result->status)
                                 echo CJSON::encode(['status' => $result->status, 'message' => 'کلمه عبور جدید از طریق پیامک برای شما ارسال گردید.']);
                             else
@@ -526,7 +525,7 @@ class UsersPublicController extends Controller
                     } else
                         Yii::app()->user->setFlash('register-success', 'ایمیل فعال سازی به پست الکترونیکی شما ارسال شد. لطفا پست الکترونیکی خود را فعال کنید.');
                 } elseif (Users::$verification_field == 'mobile') {
-                    $result = $this->sendVerificationSms($register->mobile);
+                    $result = self::sendVerificationSms($register->mobile);
                     if (isset($_POST['ajax'])) {
                         if ($result->status)
                             echo CJSON::encode(['status' => $result->status, 'msg' => 'پیامک فعالسازی با موفقیت ارسال گردید.', 'url' => $this->createUrl('/verify/' . $register->mobile)]);
@@ -576,7 +575,7 @@ class UsersPublicController extends Controller
             } else
                 $this->redirect(array('/site'));
         } elseif (Users::$verification_field == 'mobile' && $mobile) {
-            $result = $this->sendVerificationSms($mobile);
+            $result = self::sendVerificationSms($mobile);
             if ($result->status)
                 Yii::app()->user->setFlash('success', 'پیامک فعالسازی با موفقیت ارسال گردید.');
             else
@@ -695,7 +694,7 @@ class UsersPublicController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    private function sendVerificationSms($mobile)
+    public static function sendVerificationSms($mobile)
     {
         $sms = new SendSMS();
         $model = Users::model()->find('mobile=:mobile', array(':mobile' => $mobile));
@@ -717,7 +716,7 @@ class UsersPublicController extends Controller
      * @throws CException
      * @throws CHttpException
      */
-    private function newPasswordSendSms($model)
+    public static function newPasswordSendSms($model)
     {
         $sms = new SendSMS();
         if (!$sms->ValidateNumber($model->mobile))

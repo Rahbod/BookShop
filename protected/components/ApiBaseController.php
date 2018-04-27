@@ -10,10 +10,10 @@ class ApiBaseController extends CController
 {
     public $user;
 
-    private $_client_id = 'AbRgEQy91vLU3S073Byc0-8pixMTkxplOB-jAplL2FwvoGi6eBGuFZ8ckmLXFT0nBRrz_6C5rGbmmY2f';
-    private $_client_secret = 'EMcxZTH6EZ_3Y8b71wcFeB6J7t4aFGhx5He3c2P1x2H_yHVh9xB581mM8SB5IDWGZGpF8tAHz85z39Ae';
+    private $_client_id = 'AbRgEQy91vLU3S073Byc0-8pixMTkxplOB8jApfL2FwvoGi6eBGuFZ8ckmLXFT0nBRrz_6C5rGbmmY2f';
+    private $_client_secret = 'EMcqwTH6EZ_3Y8b71wcFeB6J7t4aFGhx5Hw3c2P1x2H_yHVh9xB581mM8SB5IDWGZGpF8tAHz85z39Ae';
 
-    protected function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
+    protected function _sendResponse($status = 200, $body = '', $content_type = 'application/json')
     {
         // set the status
         $status_header = 'HTTP/1.1 ' . $status . ' ' . $this->_getStatusCodeMessage($status);
