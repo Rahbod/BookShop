@@ -699,6 +699,7 @@ class UsersPublicController extends Controller
         $sms = new SendSMS();
         $model = Users::model()->find('mobile=:mobile', array(':mobile' => $mobile));
         if (!$model) return (object)['status' => false, 'msg' => 'کاربری با این شماره یافت نشد.'];
+        if ($model->status != 'pending') return (object)['status' => false, 'msg' => 'فرآیند فعالسازی قبلا انجام شده است.'];
 
         $token = rand(123456, 987697);
         $model->scenario = 'verification';

@@ -1090,11 +1090,11 @@ class ApiController extends ApiBaseController
     }
 
 
-    public function actionResendVerification($mobile = null)
+    public function actionResendVerification()
     {
-        if (Users::$verification_field == 'mobile' && $mobile) {
+        if (Users::$verification_field == 'mobile' && isset($this->request['mobile'])) {
             Yii::import('users.controllers.UsersPublicController');
-            $result = UsersPublicController::sendVerificationSms($mobile);
+            $result = UsersPublicController::sendVerificationSms($this->request['mobile']);
             if ($result->status)
                 $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'پیامک فعالسازی با موفقیت ارسال گردید.']));
             else
