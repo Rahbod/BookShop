@@ -25,6 +25,11 @@
             ),
         )); ?>
         <div class="form-row">
+            <?php echo $form->textField($model,'nickname',array('class'=>'form-control','placeholder'=>$model->getAttributeLabel('nickname'))); ?>
+            <?php echo $form->error($model,'nickname'); ?>
+            <span class="transition icon-user"></span>
+        </div>
+        <div class="form-row">
             <?php echo $form->textField($model,Users::$verification_field,array('class'=>'form-control','placeholder'=>$model->getAttributeLabel(Users::$verification_field))); ?>
             <?php echo $form->error($model,Users::$verification_field); ?>
             <span class="transition icon-envelope"></span>

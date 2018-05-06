@@ -31,11 +31,6 @@
                 <?php echo $form->textField($model,'title',array('placeholder'=>$model->getAttributeLabel('title').' *','maxlength'=>50,'class'=>'form-control')); ?>
                 <?php echo $form->error($model,'title'); ?>
             </div>
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <?php echo $form->checkBox($model,'allow_download', array('placeholder'=>$model->getAttributeLabel('title'),'class'=>'form-control', 'value' => 1)); ?>
-                <?php echo $form->error($model,'allow_download'); ?>
-                <div class="description"><small>در صورتی که اجازه دانلود داده شود، فایل کتاب پس از خرید در اختیار کاربر قرار خواهد گرفت.</small></div>
-            </div>
 
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?php echo $form->textField($model,'language',array('placeholder'=>$model->getAttributeLabel('language').' *','maxlength'=>20,'class'=>'form-control')); ?>
@@ -79,11 +74,29 @@
                 <?php echo $form->error($model,'category_id'); ?>
             </div>
 
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                        <label class="control-label" style="margin-top: 10px">اجازه دانلود</label>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6">
+                        <?php echo $form->dropDownList($model,'allow_download', [
+                            0 => 'ندارد',
+                            1 => 'دارد',
+                        ], array('placeholder'=>$model->getAttributeLabel('title'),'class'=>'form-control')); ?>
+                    </div>
+                </div>
+                <?php echo $form->error($model,'allow_download'); ?>
+                <div class="description"><small>در صورتی که اجازه دانلود داده شود، فایل کتاب پس از خرید در اختیار کاربر قرار خواهد گرفت.</small></div>
+            </div>
+
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?php echo $form->dropDownList($model,'status',array('enable'=>'فعال','disable'=>'غیرفعال',),array('class'=>'form-control')); ?>
                 <?php echo $form->error($model,'status'); ?>
             </div>
 
+            <div class="clearfix"></div>
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <?= $form->labelEx($model,'description');?>
                 <?php
@@ -196,7 +209,7 @@
         </div>
 
         <div class="buttons">
-            <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-default')); ?>
+            <?php echo CHtml::submitButton($model->isNewRecord ? 'ثبت' : 'ذخیره تغییرات',array('class'=>'btn btn-success')); ?>
         </div>
 
     <?php $this->endWidget(); ?>

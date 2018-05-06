@@ -54,7 +54,7 @@ elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
     <?php if(!Yii::app()->user->isGuest && Yii::app()->user->type == 'admin')
         $this->renderPartial('//layouts/_flashMessage');
     elseif(!Yii::app()->user->isGuest && Yii::app()->user->type == 'user')
-        $this->renderPartial('//layouts/_flashMessage'); ?>
+        $this->renderPartial('//partial-views/_flashMessage'); ?>
 
     <div class="form-group">
         <label>موضوع:</label>

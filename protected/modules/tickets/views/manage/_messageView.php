@@ -11,11 +11,11 @@
 			<?
 		elseif($data->sender == 'supporter'):
 			?>
-			<span class="svg svg-supporter"></span>
+			<span class="icon icon-headphones bg-primary"></span>
 			<?
 		elseif($data->sender == 'admin'):
 			?>
-			<span class="svg svg-manager"></span>
+			<span class="icon icon-headphones bg-primary"></span>
 			<?
 		endif;
 		?>

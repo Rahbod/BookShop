@@ -20,7 +20,7 @@ if(!isset($hideTimer) || empty($hideTimer))
 </div>
 
 <?php
-if($autoHide){
+if(isset($autoHide) && $autoHide){
     Yii::app()->clientScript->registerScript('alert-hide', "
         setTimeout(function(){
             $('#{$id}').fadeOut(function(){

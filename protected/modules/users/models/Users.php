@@ -54,6 +54,7 @@ class Users extends CActiveRecord
     public $newPassword;
     public $roleId;
     public $type;
+    public $nickname;
 
     /**
      * @return array validation rules for model attributes.
@@ -65,6 +66,7 @@ class Users extends CActiveRecord
         return array(
             array('mobile, password', 'required', 'on' => 'insert,create'),
             array('role_id', 'default', 'value' => 1),
+            array('nickname', 'length', 'max' => 20, 'min' =>3),
             array('email', 'required', 'on' => 'email, OAuthInsert'),
             array('email', 'unique', 'on' => 'OAuthInsert'),
             array('mobile', 'unique', 'on' => 'insert,create'),
@@ -133,6 +135,7 @@ class Users extends CActiveRecord
             'email' => 'پست الکترونیک',
             'repeatPassword' => 'تکرار کلمه عبور',
             'oldPassword' => 'کلمه عبور فعلی',
+            'nickname' => 'نام نمایشی',
             'newPassword' => 'کلمه عبور جدید',
             'create_date' => 'تاریخ ثبت نام',
             'status' => 'وضعیت کاربر',
@@ -202,6 +205,8 @@ class Users extends CActiveRecord
         if ($this->isNewRecord) {
             $model = new UserDetails;
             $model->user_id = $this->id;
+            if($this->nickname)
+                $model->nickname = $this->nickname;
             if($this->type == UserDetails::ACCOUNT_TYPE_REAL || $this->type == UserDetails::ACCOUNT_TYPE_LEGAL)
                 $model->type = $this->type;
             $model->credit = 0;

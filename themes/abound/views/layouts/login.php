@@ -47,7 +47,7 @@
 <section class="container">
     <div class="container-fluid">
         <!-- Include content pages -->
-        <div style="width: 35%;margin: 0 auto">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-push-4 col-md-push-4 col-sm-push-3">
             <div class="portlet">
                 <div class="portlet-decoration">
                     <div class="">ورود به مدیریت</div>
