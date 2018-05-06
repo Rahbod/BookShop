@@ -52,7 +52,7 @@
             <span class="icon-bar"></span>
         </button>
         <div class="pin"></div>
-        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->createUrl('//'); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابرســان</h1></a>
+        <a class="navbar-brand hidden-xs" href="<?php echo Yii::app()->getBaseUrl(true); ?>"><img src="<?php echo Yii::app()->theme->baseUrl.'/svg/logo-white.svg'?>" alt="<?php echo Yii::app()->name;?>"><h1>کتـــــابرســان</h1></a>
     </div>
 
     <div class="navbar-custom hidden-xs" id="mobile-menu">

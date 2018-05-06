@@ -232,4 +232,11 @@ class SiteController extends Controller
             'model' => $model,
         ));
     }
+
+    public function actionSms(){
+        $s = new SendSMS();
+        $s->AddNumber('09358389265');
+        $s->AddMessage('سلام');
+        $s->SendWithLine();
+    }
 }

@@ -39,7 +39,7 @@
             <?php echo $form->error($model,'password'); ?>
             <span class="transition icon-key"></span>
         </div>
-        <div class="form-row register-button">
+        <div class="form-row">
             <input class="btn btn-danger" type="submit" value="ثبت نام">
         </div>
         <?php $this->endWidget(); ?>
