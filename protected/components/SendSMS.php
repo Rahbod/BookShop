@@ -5,7 +5,8 @@
 class SendSMS extends CComponent
 {
     public $username = '9358389265';
-    public $password = 'yusef2008';
+//    public $password = 'yusef2008';
+    public $password = '';
     public $lineNumber = '50002015761488';
 
     private $_client;

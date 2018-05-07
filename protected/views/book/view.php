@@ -224,29 +224,14 @@ $purifier->options=array('HTML.ForbiddenElements' => array('a'));
                                 ?>
 
                                 <div class="buttons book-buttons">
-                                    <?php if($buttons):?>
-                                        <?php
-//                                        echo $bought?$model->downloadOrViewLink():$model->addToLibraryLink();
-                                        echo $model->addToLibraryLink();
-                                        /*else:
-                                            if($bought->package_id):
-                                                if($bought->package_id != $model->lastPackage->id):
-                                                    ?>
-                                                    <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
-                                                    <?php
-                                                else:
-                                                    ?>
-                                                    <a href="<?php echo $this->createUrl('/book/download', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>دانلود</a>
-                                                    <?php
-                                                endif;
-                                            else:
-                                                ?>
-                                                <a href="<?php echo $this->createUrl('/book/updateVersion', array('id'=>$model->id, 'title'=>$model->title));?>" class="btn-red"><i class="add-to-library-icon"></i>به روزرسانی کتاب (ویرایش <?= Controller::parseNumbers($model->lastPackage->version) ?>)</a>
-                                                <?php
-                                            endif;*/
-                                        //endif;
-                                        ?>
-                                    <?php endif; ?>
+                                    <?php
+                                    if($buttons):
+                                        if($bought)
+                                            echo $model->downloadOrViewLink();
+                                        else
+                                            echo $model->addToLibraryLink();
+                                    endif;
+                                    ?>
 
                                     <!--Preview Button-->
                                     <?php if ($model->preview_file && is_file($previewPath . $model->preview_file)):

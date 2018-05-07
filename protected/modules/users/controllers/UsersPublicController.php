@@ -720,9 +720,6 @@ class UsersPublicController extends Controller
     public static function newPasswordSendSms($model)
     {
         $sms = new SendSMS();
-        if (!$sms->ValidateNumber($model->mobile))
-            return (object)['status' => false, 'msg' => 'شماره موبایل کاربر معتبر نیست.'];
-
         $model->scenario = 'sms_change_password';
         $newPass = rand(1234561, 9876972);
         if (!$model->updateByPk($model->id, array('password' => (new bCrypt())->hash($newPass))))

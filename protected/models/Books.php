@@ -682,6 +682,8 @@ class Books extends CActiveRecord
      */
     public function downloadOrViewLink($preview_file = false, $class = 'btn-red')
     {
+        if(!$preview_file && !$this->allow_download)
+            return '';
         $text = $this->allow_download ? ($preview_file ? 'دانلود پیش نمایش' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
         return CHtml::tag('a', array(
             'href' => $this->getDownloadUrl($preview_file, !$this->allow_download),
