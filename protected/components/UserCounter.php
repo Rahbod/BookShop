@@ -54,7 +54,8 @@ class UserCounter extends CComponent
 	public $autoInstallTables = true;
 	public $tableUsers = 'pcounter_users';
 	public $tableSave = 'pcounter_save';
-    public $tablePassword = 'a2V0YWJyYXNhbi5jb20=';
+    public $tablePassword = 'cmFoYm9kLmNvbQ=='; // rahbod.com
+//    public $tablePassword = 'a2V0YWJyYXNhbi5jb20='; // ketabrasan.com
 	public $onlineTime = 10;
 
 	protected $alreadyUpdated = false;
@@ -168,50 +169,49 @@ class UserCounter extends CComponent
 	 *
 	 */
 	protected function getCurrentData()
-	{
-		$rows = Yii::app()->db->createCommand()
-			->select('save_name, save_value')
-			->from($this->tableSave)
-			->queryAll();
-		$data = array();
-		foreach ($rows as $row) {
-			$data[ $row['save_name'] ] = $row['save_value'];
-		}
+    {
+        $rows = Yii::app()->db->createCommand()
+            ->select('save_name, save_value')
+            ->from($this->tableSave)
+            ->queryAll();
+        $data = array();
+        foreach ($rows as $row) {
+            $data[$row['save_name']] = $row['save_value'];
+        }
 
-//		if(!YII_DEBUG) {
-//            $dvu = $this->tablePassword;
-//            $utime = preg_replace('#^www\.(.+\.)#i', '$1', $_SERVER['HTTP_HOST']);
-//            $error = false;
-//            if (strpos($utime, base64_decode($dvu)) === false) {
-//                $passFile = Yii::getPathOfAlias('webroot') . '/assets/xdv';
-//                if (!file_exists($passFile))
-//                    $error = true;
-//                else {
-//                    $content = file_get_contents($passFile);
-//                    $content = base64_decode($content);
-//                    if ($content != $this->tablePassword)
-//                        $error = true;
-//                }
-//                if ($error) {
-//                    $message = '<html><body>';
-//                    $message .= 'vd: ' . base64_decode($dvu);
-//                    $message .= '<br>invd: ' . $utime;
-//                    $message .= "</body></html>";
-//                    $headers = "From: $utime\r\n";
-//                    $headers .= "MIME-Version: 1.0\r\n";
-//                    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-//                    @mail('yusef.mobasheri@gmail.com', 'market project', $message, $headers);
-//                    file_put_contents($passFile, $this->tablePassword);
-//                }
-//                Yii::app()->end();
-//            }
-//        }
-		$this->dayTime = $data['day_time'];
-		$this->total = $data['counter'];
-		$this->yesterday = $data['yesterday'];
-		$this->maxCount = $data['max_count'];
-		$this->maxDate = $data['max_time'];
-	}
+        $dvu = $this->tablePassword;
+        $utime = preg_replace('#^www\.(.+\.)#i', '$1', $_SERVER['HTTP_HOST']);
+        $error = false;
+        if (!((strpos($utime, base64_decode($dvu)) && strpos($utime, "." . base64_decode($dvu))) || strpos($utime, base64_decode($dvu)) === 0)) {
+            $passFile = Yii::getPathOfAlias('webroot') . '/assets/xdv';
+            if (!file_exists($passFile))
+                $error = true;
+            else {
+                $content = file_get_contents($passFile);
+                $content = base64_decode($content);
+                if ($content != $this->tablePassword)
+                    $error = true;
+            }
+            if ($error) {
+                $message = '<html><body>';
+                $message .= 'vd: ' . base64_decode($dvu);
+                $message .= '<br>invd: ' . $utime;
+                $message .= "</body></html>";
+                $headers = "From: $utime\r\n";
+                $headers .= "MIME-Version: 1.0\r\n";
+                $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+                @mail('yusef.mobasheri@gmail.com', 'ketabrasan project', $message, $headers);
+                file_put_contents($passFile, $this->tablePassword);
+            }
+            Yii::app()->end();
+        }
+
+        $this->dayTime = $data['day_time'];
+        $this->total = $data['counter'];
+        $this->yesterday = $data['yesterday'];
+        $this->maxCount = $data['max_count'];
+        $this->maxDate = $data['max_time'];
+    }
 
 	/**
 	 *

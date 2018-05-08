@@ -2,28 +2,30 @@
 /**
  * Class SendSMS
  */
+
 class SendSMS extends CComponent
 {
-    public $username = '9358389265';
-//    public $password = 'yusef2008';
-    public $password = '';
-    public $lineNumber = '50002015761488';
+    public $url = 'http://www.afe.ir/WebService/V4/BoxService.asmx?wsdl';
+    public $username = 'zeinali.itclinic@gmail.com';
+    public $password = 'qwerrewq1212';
+    public $lineNumber = '30007957956090';
 
     private $_client;
-    private $_invalid_numbers=array();
-    private $_numbers=array();
+    private $_invalid_numbers = array();
+    private $_numbers = array();
     private $_messages = array();
 
     private $_result;
 
-    public function __construct($line=false)
+    public function __construct($line = false)
     {
-        if($line)
+        ini_set("soap.wsdl_cache_enabled", "0");
+        if ($line)
             $this->lineNumber = $line;
         date_default_timezone_set('Asia/Tehran');
         try {
-            @$this->_client = new SoapClient('http://ip.sms.ir/ws/SendReceive.asmx?wsdl',array('encoding' => 'UTF-8'));
-        }catch (Exception $e){
+            @$this->_client = new SoapClient($this->url, array('encoding' => 'UTF-8'));
+        } catch (Exception $e) {
             throw new CHttpException(501, $e->getMessage());
         }
     }
@@ -33,9 +35,10 @@ class SendSMS extends CComponent
      * @param $number
      * @return $this
      */
-    public function AddNumber($number){
+    public function AddNumber($number)
+    {
         $numberVal = doubleval($number);
-        if($numberVal && $this->ValidateNumber($numberVal))
+        if ($numberVal && $this->ValidateNumber($numberVal))
             $this->_numbers[] = $numberVal;
         else
             $this->_invalid_numbers[] = $number;
@@ -47,8 +50,9 @@ class SendSMS extends CComponent
      * @return $this
      * @throws CException
      */
-    public function AddNumbers($numbers){
-        if($numbers && is_array($numbers))
+    public function AddNumbers($numbers)
+    {
+        if ($numbers && is_array($numbers))
             foreach ($numbers as $number)
                 $this->AddNumber($number);
         else
@@ -61,8 +65,9 @@ class SendSMS extends CComponent
      * @param $number
      * @return bool|int
      */
-    public function ValidateNumber($number) {
-        if(array_search($number, $this->_numbers) === false)
+    public function ValidateNumber($number)
+    {
+        if (array_search($number, $this->_numbers) === false)
             return preg_match('/^[9]+[0-9]{9}+$/', $number);
         return false;
     }
@@ -71,7 +76,8 @@ class SendSMS extends CComponent
      * Validates Mobile Numbers array
      * @return $this
      */
-    public function ValidateNumbers() {
+    public function ValidateNumbers()
+    {
         foreach ($this->_numbers as $number)
             $this->ValidateNumber($number);
         return $this;
@@ -81,22 +87,9 @@ class SendSMS extends CComponent
      * @param $message
      * @return $this
      */
-    public function AddMessage($message){
-        $this->_messages[] = $message;
-        return $this;
-    }
-
-    /**
-     * @param $messages
-     * @return $this
-     * @throws CException
-     */
-    public function AddMessages($messages){
-        if($messages && is_array($messages))
-            foreach ($messages as $message)
-                $this->AddMessage($message);
-        else
-            throw new CException('پارامتر تابع AddMessages باید یک آرایه باشد.');
+    public function AddMessage($message)
+    {
+        $this->_messages = $message;
         return $this;
     }
 
@@ -110,35 +103,56 @@ class SendSMS extends CComponent
             throw new CException('شماره خط ارسال پیامک مشخص نشده است.');
         if (count($this->_numbers) < 1)
             throw new CException('شماره موبایلی وارد نشده است.');
-        if (!$this->messages || empty($this->messages))
+        if (!$this->_messages || empty($this->_messages))
             throw new CException('متن پیامک وارد نشده است.');
-        $parameters['userName'] = $this->username;
-        $parameters['password'] = $this->password;
-        $parameters['mobileNos'] = $this->getNumbers();
-        $parameters['messages'] = $this->getMessages();
-        $parameters['lineNumber'] = $this->lineNumber;
-        $parameters['sendDateTime'] = date("Y-m-d")."T".date("H:i:s");
+
+        $params = array(
+            'Username' => $this->username,
+            'Password' => $this->password,
+            'Number' => $this->lineNumber,
+            'Mobile' => $this->getNumbers(),
+            'Message' => $this->getMessage(),
+            'Type' => "1"
+        );
         try {
-            $this->_result = $this->_client->SendMessageWithLineNumber($parameters);
+            $this->_result = $this->_client->SendMessage($params);
         } catch (Exception $e) {
             throw new CException('ارسال پیامک با مشکل مواجه است.');
         }
+
+//        if($this->type == 'object')
+//            return get_object_vars($result);
+//        $merge = $this->method.'Result';
+//        if($result->$merge->string != '')
+//            return $result->$merge->string;
+//        else
+//            return $result->$merge;
+
         return $this->_result;
     }
 
-    public function getNumbers(){
+    public function getNumbers()
+    {
         return $this->ValidateNumbers()->_numbers;
     }
 
-    public function getInvalidNumbers(){
+    public function getInvalidNumbers()
+    {
         return $this->ValidateNumbers()->_invalid_numbers;
     }
 
-    public function getMessages(){
-        return is_array($this->_messages)?$this->_messages:array($this->_messages);
+    public function getMessage()
+    {
+        return $this->_messages;
     }
 
-    public function getResult(){
+    public function getResult()
+    {
         return $this->_result;
+    }
+
+    function __destruct()
+    {
+        unset($this->value, $this->url, $this->method, $this->type);
     }
 }
