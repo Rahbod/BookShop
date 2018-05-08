@@ -56,6 +56,7 @@ class Controller extends AuthController
 
     public function init()
     {
+        (new UserCounter())->init();
         Yii::app()->clientScript->registerScript('js-requirement', '
             var baseUrl = "' . Yii::app()->getBaseUrl(true) . '";
         ', CClientScript::POS_HEAD);

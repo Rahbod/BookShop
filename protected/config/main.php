@@ -10,7 +10,7 @@ return array(
 	'sourceLanguage' => '00',
 	'language' => 'fa_ir',
 	// preloading 'log' component
-	'preload'=>array('log','userCounter','chartjs'),
+	'preload'=>array('log','chartjs'),
 
 	// autoloading model and component classes
 	'import'=>array(

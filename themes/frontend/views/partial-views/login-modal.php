@@ -95,6 +95,10 @@
                     ));
                     echo CHtml::hiddenField('ajax','register-form'); ?>
                     <div class="form-group"><p id="Users_authenticate_field_em_register" class="text-center"></p></div>
+                    <div class="form-row">
+                        <?php echo $formR->textField($registerModal,'nickname',array('class'=>'text-field','placeholder'=>$registerModal->getAttributeLabel('nickname'))); ?>
+                        <?php echo $formR->error($registerModal,'nickname'); ?>
+                    </div>
                     <div class="form-group">
                         <?php echo $formR->textField($registerModal,Users::$verification_field ,array(
                             'placeholder' => $registerModal->getAttributeLabel(Users::$verification_field),

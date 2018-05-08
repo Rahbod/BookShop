@@ -7,12 +7,6 @@
  *
  */
 trait UserCustomController{
-
-    public function __construct()
-    {
-
-    }
-
     /**
      * write functions bellow
      * .
