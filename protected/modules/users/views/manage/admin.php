@@ -8,9 +8,9 @@ $this->breadcrumbs=array(
     'مدیریت',
 );
 
-$this->menu=array(
-    array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
-);
+//$this->menu=array(
+//    array('label'=>'افزودن', 'url'=>array($role==1?'create':'/publishers/panel/create')),
+//);
 $buttons = array(
     'session' => array(
         'label' => 'دستگاه های متصل',
@@ -22,12 +22,16 @@ $buttons = array(
     )
 );
 $columns = array(
-    'email',
     array(
         'header' => 'نام کامل',
-        'value' => '$data->userDetails->fa_name',
-        'filter' => CHtml::activeTextField($model,'fa_name')
+        'value' => function($data) {
+            return $data->userDetails->fa_name && !empty($data->userDetails->fa_name)?$data->userDetails->fa_name:$data->userDetails->nickname.
+                "<small>$data->email</small>";
+        },
+        'filter' => CHtml::activeTextField($model,'fa_name'),
+        'type' => 'raw'
     ),
+    'mobile',
     array(
         'header' => 'وضعیت',
         'value' => '$data->statusLabels[$data->status]',
@@ -38,17 +42,17 @@ $columns = array(
         'value' => 'Controller::parseNumbers(number_format($data->userDetails->credit))." تومان"',
         'filter' => false
     ),
-    array(
-        'header' => 'دستگاه فعال',
-        'value' => 'Controller::parseNumbers(number_format($data->getSessionsCount()))',
-        'htmlOptions' => array(
-            'style' => 'width:10px'
-        ),
-        'filter' => false
-    ),
+//    array(
+//        'header' => 'دستگاه فعال',
+//        'value' => 'Controller::parseNumbers(number_format($data->getSessionsCount()))',
+//        'htmlOptions' => array(
+//            'style' => 'width:10px'
+//        ),
+//        'filter' => false
+//    ),
     array(
         'class'=>'CButtonColumn',
-        'template' => '{session} {view}{update}{delete}',
+        'template' => '{view}{update}{delete}',
         'buttons' => $buttons
     ),
 );

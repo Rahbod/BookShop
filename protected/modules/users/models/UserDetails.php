@@ -260,11 +260,11 @@ class UserDetails extends CActiveRecord
     public function getShowName()
     {
         if (Yii::app()->language == 'fa_ir')
-            return !empty($this->fa_name) ? $this->fa_name : $this->user->email;
+            return !empty($this->fa_name) ? $this->fa_name : $this->nickname;
         elseif (Yii::app()->language == 'en')
-            return !empty($this->en_name) ? $this->en_name : $this->user->email;
+            return !empty($this->en_name) ? $this->en_name : $this->nickname;
         else
-            return $this->user->email;
+            return $this->nickname;
     }
 
     public function validateAccountingInformation()

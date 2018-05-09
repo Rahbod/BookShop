@@ -430,21 +430,22 @@ class BookController extends Controller
             $ext = strtolower(pathinfo($model->preview_file, PATHINFO_EXTENSION));
             $this->download($model->preview_file, $previewPath, 'پیش نمایش - '.str_replace(' ','_',$model->title).'.'.$ext);
         }else{
-//            if($model->price == 0){
-//                $model->download += 1;
-//                $model->setScenario('update-download');
-//                $model->save();
-//                $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-//            }else{
-//                $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
-//                if($buy){
-//                    $model->download += 1;
-//                    $model->setScenario('update-download');
-//                    $model->save();
-//                    $this->download($model->lastPackage->file_name, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
-//                }else
-//                    $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
-//            }
+            $filename = $model->lastPackage->pdf_file_name?:$model->lastPackage->epub_file_name;
+            if($model->price == 0){
+                $model->download += 1;
+                $model->setScenario('update-download');
+                $model->save();
+                $this->download($filename, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+            }else{
+                $buy = BookBuys::model()->findByAttributes(array('user_id' => Yii::app()->user->getId(), 'book_id' => $id));
+                if($buy){
+                    $model->download += 1;
+                    $model->setScenario('update-download');
+                    $model->save();
+                    $this->download($filename, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
+                }else
+                    $this->redirect(array('/book/buy/' . CHtml::encode($model->id) . '/' . CHtml::encode($model->title)));
+            }
             throw new CHttpException(500, 'درخواست موردنظر نامعتبر است.');
         }
     }
@@ -496,12 +497,8 @@ class BookController extends Controller
         $model = $this->loadModel($id);
 
         if(isset($_GET['preview'])){
-            if(!$model->allow_download) {
-                $this->render('book_reader', compact('model'));
-                Yii::app()->end();
-            }
-            else
-                $this->redirect($model->getDownloadUrl(true));
+            $this->render('book_reader', compact('model'));
+            Yii::app()->end();
         }else // redirect to view book
             $this->redirect($model->getViewUrl());
 

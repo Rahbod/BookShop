@@ -21,7 +21,8 @@ class UsersManageController extends Controller
                 'sessions',
                 'removeSession',
                 'create',
-                'update',
+                '
+                ',
                 'admin',
                 'adminPublishers',
                 'delete',
@@ -88,24 +89,28 @@ class UsersManageController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->loadModel($id);
-        $model->scenario = 'changeStatus';
+        /** @var $model UserDetails */
+        $model = UserDetails::model()->findByAttributes(array('user_id' => $id));
+        $model->scenario = 'update_profile';
+        $umodel = $model->user;
+        $umodel->scenario = 'change_status';
+
         if(isset($_POST['Users'])){
-            $model->attributes = $_POST['Users'];
-            if($model->save()){
-                Yii::app()->user->setFlash('success', '<span class="icon-check"></span>&nbsp;&nbsp;اطلاعات با موفقیت ذخیره شد.');
-                if(isset($_POST['ajax'])){
-                    echo CJSON::encode(['status' => 'ok']);
-                    Yii::app()->end();
-                }else
-                    $this->redirect(array('admin'));
-            }else{
+            $umodel->status = $_POST['Users']['status'];
+            @$umodel->save();
+        }
+
+        if (isset($_POST['UserDetails'])) {
+            unset($_POST['UserDetails']['credit']);
+            unset($_POST['UserDetails']['publisher_id']);
+            unset($_POST['UserDetails']['details_status']);
+            unset($_POST['UserDetails']['national_card_image']);
+            $model->attributes = $_POST['UserDetails'];
+            if ($model->save()) {
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                $this->refresh();
+            } else
                 Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
-                if(isset($_POST['ajax'])){
-                    echo CJSON::encode(['status' => 'error']);
-                    Yii::app()->end();
-                }
-            }
         }
 
         $this->render('update', array(
@@ -114,9 +119,8 @@ class UsersManageController extends Controller
     }
 
     /**
-     * Deletes a particular model.
-     * If deletion is successful, the browser will be redirected to the 'admin' page.
-     * @param integer $id the ID of the model to be deleted
+     * @param $id
+     * @throws CHttpException
      */
     public function actionDelete($id)
     {

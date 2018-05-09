@@ -110,13 +110,13 @@ return array(
 		'yexcel' => array(
 			'class' => 'ext.yexcel.Yexcel'
 		),
-//		'session' => array(
-//			'class' => 'YmDbHttpSession',
-//			'autoStart' => false,
-//			'connectionID' => 'db',
-//			'sessionTableName' => 'ym_sessions',
-//			'timeout' => 1800
-//		),
+		'session' => array(
+			'class' => 'YmDbHttpSession',
+			'autoStart' => false,
+			'connectionID' => 'db',
+			'sessionTableName' => 'ym_sessions',
+			'timeout' => 1800
+		),
 		'userCounter' => array(
 			'class' => 'application.components.UserCounter',
 			'tableUsers' => 'ym_counter_users',

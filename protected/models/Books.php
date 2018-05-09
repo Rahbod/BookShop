@@ -631,7 +631,7 @@ class Books extends CActiveRecord
         if ($reading)
             $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title));
         if ($preview_file)
-            $u .= '/?preview=true';
+            $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title)).'/?preview=true';
         return $u;
     }
 
@@ -684,7 +684,7 @@ class Books extends CActiveRecord
     {
         if(!$preview_file && !$this->allow_download)
             return '';
-        $text = $this->allow_download ? ($preview_file ? 'دانلود پیش نمایش' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
+        $text = $this->allow_download ? ($preview_file ? 'پیش نمایش کتاب' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
         return CHtml::tag('a', array(
             'href' => $this->getDownloadUrl($preview_file, !$this->allow_download),
             'class' => $class

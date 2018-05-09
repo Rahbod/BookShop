@@ -9,7 +9,7 @@ class ApiController extends ApiBaseController
     public function filters()
     {
         return array(
-            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword, encrypt, decrypt, register, resendVerification, verification',
+            'RestAccessControl + index, search, find, list, page, creditPrices, row, forgetPassword, register, resendVerification, verification',
             'RestAuthControl + bookmark, bookmarkList, comment, discount, buy, profile, credit, bin, editProfile, download',
         );
     }
@@ -846,8 +846,6 @@ class ApiController extends ApiBaseController
 
                 $this->_sendResponse(200, CJSON::encode(['status' => true, 'url' => $this->createAbsoluteUrl('/api/downloadFile?token=' . $token)]));
             } else {
-                //$buy = BookBuys::model()->findByAttributes(array('user_id' => $this->user->id, 'book_id' => $this->request['book_id']));
-                //if($buy)
                 if (Library::BookExistsInLib($model->id, $model->lastPackage->id, $this->user->id)) {
                     $model->download += 1;
                     $model->setScenario('update-download');
@@ -875,7 +873,7 @@ class ApiController extends ApiBaseController
     {
         if (isset($_GET['token'])) {
             $fileName = Yii::app()->JWT->decode($_GET['token']);
-            $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/encrypted');
+            $this->download($fileName, Yii::getPathOfAlias("webroot") . '/uploads/books/files');
         }
     }
 

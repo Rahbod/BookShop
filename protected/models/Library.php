@@ -156,7 +156,7 @@ class Library extends CActiveRecord
      * @param $book_id
      * @param $package_id
      * @param $user_id
-     * @return bool
+     * @return bool|Library
      */
     public static function BookExistsInLib($book_id ,$package_id ,$user_id)
     {

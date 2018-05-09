@@ -16,7 +16,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>تغییر اعتبار کاربر "<?= $model->fa_name ?>"</h1>
+<h1>تغییر اعتبار کاربر "<?= $model->getShowName() ?>"</h1>
 
 <? $this->renderPartial('//layouts/_flashMessage'); ?>
 <div class="form">

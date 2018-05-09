@@ -21,10 +21,10 @@ class OauthController extends ApiBaseController
 
     public function actionAuthorize()
     {
-        if(isset($this->request['email']) and isset($this->request['password'])){
+        if(isset($this->request['mobile']) and isset($this->request['password'])){
             $login = new UserLoginForm;
             $login->scenario = 'app_login';
-            $login->email = $this->request['email'];
+            $login->verification_field_value = $this->request['mobile'];
             $login->password = $this->request['password'];
             if($login->validate() && $login->login()){
                 $this->_sendResponse(200, CJSON::encode([
@@ -101,12 +101,15 @@ class OauthController extends ApiBaseController
                     $this->_sendResponse(401, CJSON::encode(['status' => false,
                         'message' => 'Refresh Token is invalid. Please Authorize again.']), 'application/json');
                 @session_start();
-                session_regenerate_id($session->id);
-                $newID=session_id();
-                @session_destroy();
-                $session->id = $newID;
-                $session->expire = time()+Yii::app()->session->timeout;
-                if($session->save()){
+                $dbsess = new YmDbHttpSession();
+                $newID = $dbsess->regenerateID(true, $session->id);
+
+//                session_regenerate_id($session->id);
+//                $newID=session_id();
+//                @session_destroy();
+//                $session->id = $newID;
+//                $session->expire = time()+Yii::app()->session->timeout;
+                if($newID){
                     $access_token = Yii::app()->JWT->encode([
                         'email' => $session->user->email,
                         'user_id' => $session->user->id,

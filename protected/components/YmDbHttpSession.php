@@ -6,7 +6,7 @@ class YmDbHttpSession extends CHttpSession
      * will be automatically created and used. The SQLite database file is
      * is <code>protected/runtime/session-YiiVersion.db</code>.
      */
-    public $connectionID;
+    public $connectionID= 'db';
     /**
      * @var string the name of the DB table to store session content.
      * Note, if {@link autoCreateSessionTable} is false and you want to create the DB table manually by yourself,
@@ -16,7 +16,7 @@ class YmDbHttpSession extends CHttpSession
      * </pre>
      * @see autoCreateSessionTable
      */
-    public $sessionTableName='YiiSession';
+    public $sessionTableName='ym_sessions';
     /**
      * @var boolean whether the session DB table should be automatically created if not exists. Defaults to true.
      * @see sessionTableName
@@ -44,10 +44,10 @@ class YmDbHttpSession extends CHttpSession
      * @param boolean $deleteOldSession Whether to delete the old associated session file or not.
      * @since 1.1.8
      */
-    public function regenerateID($deleteOldSession=false)
+    public function regenerateID($deleteOldSession=false, $oldID = null)
     {
-        $oldID=session_id();
-
+        if(!$oldID)
+            $oldID=session_id();
         // if no session is started, there is nothing to regenerate
         if(empty($oldID))
             return;
@@ -82,6 +82,7 @@ class YmDbHttpSession extends CHttpSession
                 'data'=>'',
             ));
         }
+        return $newID;
     }
 
     /**
