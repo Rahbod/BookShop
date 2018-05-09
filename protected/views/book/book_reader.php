@@ -16,6 +16,7 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
     $view = true;
     if ($ext == 'pdf') {
+        $this->redirect($model->getDownloadUrl(true, false, true));
         $msg = 'بخش نمایش فایل PDF در دست انجام است، لطفا بعدا مراجعه فرمایید.';
         $view = false;
     }
@@ -35,10 +36,6 @@ if (isset($_GET['preview']) && is_file($previewPath . $model->preview_file)) {
 //        $msg = 'فایل کتاب ناقص است، لطفا با بخش پشتیبانی تماس حاصل فرمایید.';
 //}
 if ($view):
-    if ($ext == 'pdf'):
-
-
-    elseif ($ext == 'epub'):
         ?>
         <div id="main" class="">
             <div id="prev" class="arrow">&#xe902;</div>
@@ -147,6 +144,10 @@ if ($view):
                 </div>
             </div>
         </div>
+    <?php
+    if ($ext == 'pdf'):
+    elseif ($ext == 'epub'):
+    ?>
         <script>
             'use strict';
             var reader = null;
@@ -175,6 +176,8 @@ if ($view):
         </script>
     <?php
     endif;
+    ?>
+    <?php
 else:
     Yii::app()->user->setFlash('failed', $msg);
     $this->redirect($model->getViewUrl());

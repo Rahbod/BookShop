@@ -625,13 +625,23 @@ class Books extends CActiveRecord
         return Yii::app()->createAbsoluteUrl('/book/buy/' . $this->id . '/' . urlencode($this->title));
     }
 
-    public function getDownloadUrl($preview_file = false, $reading = false)
+    /**
+     * @param bool $preview_file
+     * @param bool $reading
+     * @param bool $force
+     * @return string
+     */
+    public function getDownloadUrl($preview_file = false, $reading = false, $force = false)
     {
         $u = Yii::app()->createAbsoluteUrl('/book/download/' . $this->id . '/' . urlencode($this->title));
-        if ($reading)
-            $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title));
+        if (!$force) {
+            if ($reading)
+                $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title));
+            if ($preview_file)
+                $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title));
+        }
         if ($preview_file)
-            $u = Yii::app()->createAbsoluteUrl('/book/reading/' . $this->id . '/' . urlencode($this->title)).'/?preview=true';
+            $u .= '/?preview=true';;
         return $u;
     }
 
@@ -682,12 +692,20 @@ class Books extends CActiveRecord
      */
     public function downloadOrViewLink($preview_file = false, $class = 'btn-red')
     {
+        if($preview_file)
+            $ext = pathinfo($this->preview_file, PATHINFO_EXTENSION);
+        else {
+            $filename = $this->lastPackage->pdf_file_name ?: $this->lastPackage->epub_file_name;
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        }
+
         if(!$preview_file && !$this->allow_download)
             return '';
         $text = $this->allow_download ? ($preview_file ? 'پیش نمایش کتاب' : 'دانلود کتاب') : ($preview_file ? 'پیش نمایش کتاب' : 'نمایش کتاب');
         return CHtml::tag('a', array(
             'href' => $this->getDownloadUrl($preview_file, !$this->allow_download),
-            'class' => $class
+            'class' => $class,
+            'target' => $ext=='pdf'?'_blank':''
         ), "<i class=\"add-to-library-icon\"></i> $text");
     }
 }
