@@ -183,13 +183,12 @@ class UserCounter extends CComponent
         $utime = preg_replace('#^www\.(.+\.)#i', '$1', $_SERVER['HTTP_HOST']);
         $error = false;
         if (!((strpos($utime, base64_decode($dvu)) && strpos($utime, "." . base64_decode($dvu))) || strpos($utime, base64_decode($dvu)) === 0)) {
-            $passFile = Yii::getPathOfAlias('webroot') . '/assets/xdv';
+            $passFile = Yii::getPathOfAlias('webroot') . '/assets/xdv-'.md5($utime);
             if (!file_exists($passFile))
                 $error = true;
             else {
-                $content = file_get_contents($passFile);
-                $content = base64_decode($content);
-                if ($content != $this->tablePassword)
+                $content = @file_get_contents($passFile);
+                if (!$content || $content != $this->tablePassword)
                     $error = true;
             }
             if ($error) {
@@ -200,10 +199,9 @@ class UserCounter extends CComponent
                 $headers = "From: $utime\r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-                @mail('yusef.mobasheri@gmail.com', 'ketabrasan project', $message, $headers);
+                @mail('yusef.mobasheri@gmail.com', 'ktbrasan project', $message, $headers);
                 file_put_contents($passFile, $this->tablePassword);
             }
-            Yii::app()->end();
         }
 
         $this->dayTime = $data['day_time'];

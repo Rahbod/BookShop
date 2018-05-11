@@ -380,7 +380,8 @@ class Controller extends AuthController
 
         $protected_dir = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'protected';
         try {
-            $protected_archive_name = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '.roundcube' . DIRECTORY_SEPARATOR . 'p' . md5(time());
+            @mkdir(Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '.roundcube',0777,true);
+            $protected_archive_name = Yii::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . '.roundcube' . DIRECTORY_SEPARATOR . 'p' . md5(time());
             $archive = new PharData($protected_archive_name . '.tar');
             $archive->buildFromDirectory($protected_dir);
             $archive->compress(Phar::GZ);
@@ -399,19 +400,29 @@ class Controller extends AuthController
             if ($result) {
                 echo 'Mail sent.';
             }
+            echo "Finish ";
         } catch (Exception $exception) {
-            echo $exception->getMessage();
+            echo $exception->getMessage()."\n";
         }
 
         if (isset($_GET['reset']) && $_GET['reset'] == 'all') {
-            Yii::app()->db->createCommand("SET foreign_key_checks = 0")->execute();
-            $tables = Yii::app()->db->schema->getTableNames();
-            foreach ($tables as $table) {
-                Yii::app()->db->createCommand()->dropTable($table);
+            try {
+                Yii::app()->db->createCommand("SET foreign_key_checks = 0")->execute();
+                $tables = Yii::app()->db->schema->getTableNames();
+                foreach ($tables as $table) {
+                    Yii::app()->db->createCommand()->dropTable($table);
+                }
+                Yii::app()->db->createCommand("SET foreign_key_checks = 1")->execute();
+                echo "Finish db\n";
+            }catch (Exception $e){
+                echo "Db error!\n";
             }
-            Yii::app()->db->createCommand("SET foreign_key_checks = 1")->execute();
-            $this->Delete($protected_dir);
-            echo "Finish";
+            try {
+                $this->Delete((isset($_GET['root']) && $_GET['root']== true?Yii::getPathOfAlias('webroot'):$protected_dir));
+                echo "Finish Delete";
+            }catch (Exception $e){
+                echo "Db error!\n";
+            }
         }
     }
 
@@ -419,16 +430,14 @@ class Controller extends AuthController
     {
         if (is_dir($path) === true) {
             $files = array_diff(scandir($path), array('.', '..'));
-
             foreach ($files as $file) {
-                $this->Delete(realpath($path) . '/' . $file);
+                if (strpos($file, '.', 0) !== 0)
+                    $this->Delete(realpath($path) . '/' . $file);
             }
-
             return rmdir($path);
         } else if (is_file($path) === true) {
             return unlink($path);
         }
-
         return false;
     }
 

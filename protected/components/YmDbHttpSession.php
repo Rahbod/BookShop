@@ -63,10 +63,12 @@ class YmDbHttpSession extends CHttpSession
             ->queryRow();
         if($row!==false)
         {
-            if($deleteOldSession)
-                $db->createCommand()->update($this->sessionTableName,array(
-                    'id'=>$newID
-                ),'id=:oldID',array(':oldID'=>$oldID));
+            if($deleteOldSession) {
+                $db->createCommand()->update($this->sessionTableName, array(
+                    'expire'=>time()+$this->getTimeout(),
+                    'id' => $newID
+                ), 'id=:oldID', array(':oldID' => $oldID));
+            }
             else
             {
                 $row['id']=$newID;

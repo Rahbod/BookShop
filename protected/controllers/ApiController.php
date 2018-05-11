@@ -681,7 +681,7 @@ class ApiController extends ApiBaseController
 
     public function actionEditProfile()
     {
-        if (isset($this->request['profile'])) {
+        if (isset($this->request['profile']) && $this->request['profile']) {
             $profile = $this->request['profile'];
             $profileFields = [
                 'name',
@@ -691,22 +691,22 @@ class ApiController extends ApiBaseController
                 'address',
             ];
 
-            foreach ($profileFields as $field)
-                if (!key_exists($field, $profile))
-                    $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'The ' . $field . ' variable does not exist in the Profile array.']));
+            foreach ($profile as $key => $value)
+                if (!in_array($key, $profileFields))
+                    unset($profile[$key]);
 
             /* @var $detailsModel UserDetails */
             $detailsModel = UserDetails::model()->findByAttributes(array('user_id' => $this->user->id));
             $detailsModel->scenario = 'update_profile';
-            $detailsModel->fa_name = $profile['name'];
-            $detailsModel->national_code = $profile['national_code'];
-            $detailsModel->phone = $profile['phone'];
-            $detailsModel->zip_code = $profile['zip_code'];
-            $detailsModel->address = $profile['address'];
+            if(isset($profile['name'])) $detailsModel->fa_name = $profile['name'];
+            if(isset($profile['national_code'])) $detailsModel->national_code = $profile['national_code'];
+            if(isset($profile['phone'])) $detailsModel->phone = $profile['phone'];
+            if(isset($profile['zip_code'])) $detailsModel->zip_code = $profile['zip_code'];
+            if(isset($profile['address'])) $detailsModel->address = $profile['address'];
             if ($detailsModel->save())
                 $this->_sendResponse(200, CJSON::encode(['status' => true, 'message' => 'اطلاعات با موفقیت ثبت شد.']));
             else
-                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.']));
+                $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'در ثبت اطلاعات خطایی رخ داده است. لطفا مجددا تلاش کنید.', 'errors' => $this->implodeErrors($detailsModel)]));
         } else
             $this->_sendResponse(400, CJSON::encode(['status' => false, 'message' => 'Profile variable is required.']));
     }
