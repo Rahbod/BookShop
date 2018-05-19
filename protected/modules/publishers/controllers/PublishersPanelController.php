@@ -370,6 +370,7 @@ class PublishersPanelController extends Controller
         $criteria = new CDbCriteria();
         $criteria->addCondition('user_id=:user_id');
         $criteria->params = array(':user_id' => Yii::app()->user->getId());
+        $criteria->order = 'id DESC';
         $settlementHistory = new CActiveDataProvider('UserSettlement', array(
             'criteria' => $criteria,
         ));
