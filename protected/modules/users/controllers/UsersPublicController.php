@@ -141,6 +141,9 @@ class UsersPublicController extends Controller
      */
     public function actionSetting()
     {
+        $avatarImageUrl = Yii::app()->getBaseUrl(true). '/uploads/users/avatar';
+        $avatarImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/avatar';
+
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         $model = Users::model()->findByPk(Yii::app()->user->getId());
@@ -161,7 +164,7 @@ class UsersPublicController extends Controller
             $detailsModel->attributes = $_POST['UserDetails'];
             if ($detailsModel->save()) {
                 Yii::app()->user->setFlash('profile-success', 'اطلاعات با موفقیت ثبت شد.');
-                Yii::app()->user->setState('avatar', $detailsModel->avatar);
+                Yii::app()->user->setState('avatar', $avatarImageUrl.'/'.$detailsModel->avatar);
                 $this->refresh();
             } else
                 Yii::app()->user->setFlash('profile-failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
@@ -179,8 +182,6 @@ class UsersPublicController extends Controller
             }
         }
 
-        $avatarImageUrl = $this->createUrl('/uploads/users/avatar');
-        $avatarImagePath = Yii::getPathOfAlias('webroot') . '/uploads/users/avatar';
         $avatarImage = array();
         if ($detailsModel->avatar != '')
             $avatarImage = array(
