@@ -302,7 +302,9 @@ class PublishersPanelController extends Controller
                     unset($_POST['UserDetails']['credit']);
                     unset($_POST['UserDetails']['publisher_id']);
                     unset($_POST['UserDetails']['details_status']);
+                    $avatar = $data['detailsModel']->avatar;
                     $data['detailsModel']->attributes = $_POST['UserDetails'];
+                    $data['detailsModel']->avatar = $avatar;
                     $data['detailsModel']->details_status = 'pending';
                     if ($data['detailsModel']->save()) {
                         $data['detailsModel']->user->role_id = 2;
@@ -359,7 +361,7 @@ class PublishersPanelController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/panel';
         Yii::app()->getModule('setting');
-        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
+        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_settle'));
         Yii::app()->getModule('users');
         Yii::app()->getModule('pages');
         $userDetailsModel = UserDetails::model()->findByAttributes(array('user_id' => Yii::app()->user->getId()));
@@ -395,7 +397,7 @@ class PublishersPanelController extends Controller
         $this->render('settlement', array(
             'userDetailsModel' => $userDetailsModel,
             'settlementHistory' => $settlementHistory,
-            'min_credit' => $setting->value,
+            'min_settle' => $setting->value,
             'formDisabled' => false,
         ));
     }

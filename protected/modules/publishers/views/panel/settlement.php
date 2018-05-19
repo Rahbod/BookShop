@@ -67,7 +67,7 @@ Yii::app()->clientScript->registerScript('account-type','
         <?php echo $form->label($userDetailsModel, 'monthly_settlement', array(
             'style'=>'display:inline-block;margin:15px 0;',
         ));?>
-        <span>: مبلغ قابل تسویه حداقل <?= Controller::parseNumbers(number_format($min_credit)) ?> تومان است که 20اُم هر ماه به شماره شبای زیر واریز می شود.</span>
+        <span>: مبلغ قابل تسویه حداقل <?= Controller::parseNumbers(number_format($min_settle)) ?> تومان است که 20اُم هر ماه به شماره شبای زیر واریز می شود.</span>
     </div>
     <div class="form-row">
         <h4>اطلاعات حساب بانکی</h4>

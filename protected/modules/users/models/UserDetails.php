@@ -283,7 +283,7 @@ class UserDetails extends CActiveRecord
     public static function SettlementCriteria()
     {
         Yii::app()->getModule('setting');
-        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_credit'));
+        $setting = SiteSetting::model()->find('name=:name', array(':name' => 'min_settle'));
         $criteria = new CDbCriteria();
         $criteria->addCondition('iban IS NOT NULL AND iban != ""');
         $criteria->addCondition('account_owner_name IS NOT NULL AND account_owner_name != ""');
