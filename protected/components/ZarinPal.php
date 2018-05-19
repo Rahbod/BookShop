@@ -5,16 +5,16 @@
 class ZarinPal extends CComponent
 {
     public $callback_url;
-    
-//    private $_merchant_id = '012d3926-9824-11e6-a86b-005056a205be';
-    private $_merchant_id = 'e31942e8-189f-11e7-b4e1-005056a205b';
+
+    private $_merchant_id;
     private $_gateway_name = 'زرین پال';
     private $_status;
     private $_authority;
     private $_ref_id;
 
-    public function init(){
-
+    public function init()
+    {
+        $this->_merchant_id = SiteSetting::getOption('merchant_code') ?: "e31942e8-189f-11e7-b4e1-005056a205b";
     }
 
     public function request($amount, $description, $email = null, $mobile = '0')

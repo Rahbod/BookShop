@@ -96,7 +96,43 @@ return array(
 
 	// application components
 	'components'=>array(
-		'phpseclib' => array( // encoder
+        'urlManager'=>array(
+            'urlFormat'=>'path',
+            'showScriptName'=>false,
+            'appendParams'=>true,
+            'rules'=>array(
+                'verify/<mobile:\d+>' => 'users/public/verify',
+                'users/public/resendVerification/<mobile:\d+>' => '/users/public/resendVerification',
+                '<action:(about|contactus|help|publishers)>' => 'site/<action>',
+                '<action:(register|login)>' => 'users/public/index',
+                '<action:(logout|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',
+                '/help'=>'site/help',
+                'encoder/<action:\w+>'=>'encoder/<action>',
+                'books/<id:\d+>'=>'books/view',
+                'documents/<id:\d+>/<title>'=>'pages/manage/view',
+                'category/<id:\d+>/<title:(.*)>'=>'category/index',
+                'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
+                'news/category/<id:\d+>/<title:(.*)>'=>'news/categoriesManage/view',
+                'news/tag/<id:\d+>/<title:(.*)>'=>'news/manage/tag',
+                'news/index'=>'news/manage/index',
+                'category/<action:\w+>'=>'bookCategories/<action>',
+                'news/category/<action:\w+>'=>'news/categoriesManage/<action>',
+                '<module:\w+>/<id:\d+>'=>'<module>/manage/view',
+                '<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
+                '<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
+                '<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
+                '<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
+                '<module:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<module>/manage/<action>',
+                '<controller:\w+>/<id:\d+>'=>'<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action>/view',
+                '<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<id:\d+>'=>'<module>/<controller>/view',
+            ),
+        ),
+        'db'=>require(dirname(__FILE__).'/database.php'),
+		'phpseclib' => array(
 			'class' => 'ext.phpseclib.PhpSecLib'
 		),
 		'JWT' => array(
@@ -125,7 +161,6 @@ return array(
 			'onlineTime' => 5, // min
 		),
 		'user'=>array(
-			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 			'class' => 'WebUser',
 			'loginUrl'=>array('/login'),
@@ -136,49 +171,8 @@ return array(
 			'connectionID'=>'db',
 		),
 		'chartjs' => array('class' => 'chartjs.components.ChartJs'),
-		// uncomment the following to enable URLs in path-format
-		// @todo change rules in projects
-		'urlManager'=>array(
-			'urlFormat'=>'path',
-			'showScriptName'=>false,
-			'appendParams'=>true,
-			'rules'=>array(
-				'verify/<mobile:\d+>' => 'users/public/verify',
-				'users/public/resendVerification/<mobile:\d+>' => '/users/public/resendVerification',
-				'<action:(about|contactus|help|publishers)>' => 'site/<action>',
-				'<action:(register|login)>' => 'users/public/index',
-				'<action:(logout|dashboard|googleLogin|library|transactions|downloaded)>' => 'users/public/<action>',
-				'/help'=>'site/help',
-				'encoder/<action:\w+>'=>'encoder/<action>',
-				'books/<id:\d+>'=>'books/view',
-				'documents/<id:\d+>/<title>'=>'pages/manage/view',
-				'category/<id:\d+>/<title:(.*)>'=>'category/index',
-				'news/<id:\d+>/<title:(.*)>'=>'news/manage/view',
-				'news/category/<id:\d+>/<title:(.*)>'=>'news/categoriesManage/view',
-				'news/tag/<id:\d+>/<title:(.*)>'=>'news/manage/tag',
-				'news/index'=>'news/manage/index',
-				'category/<action:\w+>'=>'bookCategories/<action>',
-				'news/category/<action:\w+>'=>'news/categoriesManage/<action>',
-				'<module:\w+>/<id:\d+>'=>'<module>/manage/view',
-				'<module:\w+>/<controller:\w+>'=>'<module>/<controller>/index',
-				'<controller:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/<action>',
-				'<controller:\w+>/<id:\d+>/<title:(.*)>'=>'<controller>/view',
-				'<module:\w+>/<controller:\w+>/<id:\d+>/<title:\w+>'=>'<module>/<controller>/view',
-				'<module:\w+>/<action:\w+>/<id:\d+>/<title:(.*)>'=>'<module>/manage/<action>',
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-				'<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action>/view',
-				'<module:\w+>/<controller:\w+>/<action:\w+>'=>'<module>/<controller>/<action>',
-				'<module:\w+>/<controller:\w+>/<id:\d+>'=>'<module>/<controller>/view',
-			),
-		),
-
-		// database settings are configured in database.php
-		'db'=>require(dirname(__FILE__).'/database.php'),
 
 		'errorHandler'=>array(
-			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
 
@@ -190,7 +184,6 @@ return array(
 					'levels'=>'error, warning, trace, info',
 					'categories'=>'application.*',
 				),
-				// uncomment the following to show log messages on web pages
 				array(
 					'class' => 'CWebLogRoute',
 					'enabled' => YII_DEBUG,
@@ -201,7 +194,6 @@ return array(
 			),
 		),
 		'clientScript'=>array(
-			//'class'=>'ext.minScript.components.ExtMinScript',
 			'coreScriptPosition' => CClientScript::POS_HEAD,
 			'defaultScriptFilePosition' => CClientScript::POS_END,
 		),
