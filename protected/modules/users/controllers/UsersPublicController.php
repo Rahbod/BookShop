@@ -78,7 +78,7 @@ class UsersPublicController extends Controller
      */
     public function actionLogout()
     {
-        Yii::app()->user->logout();
+        @Yii::app()->user->logout();
         $this->redirect(Yii::app()->getBaseUrl(true));
     }
 
