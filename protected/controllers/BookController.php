@@ -20,7 +20,7 @@ class BookController extends Controller
     public function filters()
     {
         return array(
-            'checkAccess + reportSales, reportIncome, reportBookSales, reportCreditBuys, buy, bookmark, rate, verify, updateVersion, reading' ,
+            'checkAccess + reportSales, reportIncome, reportBookSales, reportCreditBuys, buy, bookmark, rate, verify, updateVersion',
             'postOnly + bookmark' ,
         );
     }

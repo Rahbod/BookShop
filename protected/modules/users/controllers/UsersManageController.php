@@ -21,8 +21,7 @@ class UsersManageController extends Controller
                 'sessions',
                 'removeSession',
                 'create',
-                '
-                ',
+                'update',
                 'admin',
                 'adminPublishers',
                 'delete',
@@ -115,6 +114,7 @@ class UsersManageController extends Controller
 
         $this->render('update', array(
             'model' => $model,
+            'umodel' => $umodel,
         ));
     }
 

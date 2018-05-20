@@ -81,7 +81,7 @@ class Controller extends AuthController
             ->from('ym_site_setting')
             ->where('name = "default_title"')
             ->queryScalar();
-        $bookCategories = BookCategories::model()->findAll();
+        $bookCategories = BookCategories::model()->findAll(array('order' => 't.title'));
         $this->categories = $bookCategories;
         $this->navbarCategories = $bookCategories;
         $criteria = new CDbCriteria();

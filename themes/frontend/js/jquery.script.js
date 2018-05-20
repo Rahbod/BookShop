@@ -115,7 +115,7 @@ $(function() {
             content = null;
         $('#categories-modal').on('shown.bs.modal', function () {
             if (catsList == null && content == null) {
-                catsList = $(this).find('.cats-list').niceScroll({
+                catsList = $(this).find('.cats-list .nav-categories').niceScroll({
                     cursorcolor: '#999',
                     cursorborder: 'none',
                     autohidemode: false,

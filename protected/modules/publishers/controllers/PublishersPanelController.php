@@ -654,10 +654,20 @@ class PublishersPanelController extends Controller
 
         if (isset($_POST['Users'])) {
             $model->attributes = $_POST['Users'];
+            $pwd =$model->password;
             $model->role_id = 2;
             $model->create_date = time();
 
             if($model->save()){
+                // send sms
+                $sms = new SendSMS();
+                $sms->AddMessage("ناشر گرامی،
+حساب کاربری شما در کتابرسان ایجاد شد.
+نام کاربری: {$model->mobile} 
+کلمه عبور: {$pwd}");
+                $sms->AddNumber($model->mobile);
+                @$sms->SendWithLine();
+
                 Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
                 $this->redirect(array('update', 'id' => $model->id));
             } else

@@ -7,14 +7,7 @@
 
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'advertises-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
-));
+<?php
 $books = array();
 if($model->isNewRecord) {
 	// get valid books for advertising
@@ -26,7 +19,16 @@ if($model->isNewRecord) {
 }
 if(!$model->isNewRecord || $books) {
 	?>
-
+    <?php
+    $form=$this->beginWidget('CActiveForm', array(
+        'id'=>'advertises-form',
+        // Please note: When you enable ajax validation, make sure the corresponding
+        // controller action is handling ajax validation correctly.
+        // There is a call to performAjaxValidation() commented in generated controller code.
+        // See class documentation of CActiveForm for details on this.
+        'enableAjaxValidation'=>false,
+    ));
+    ?>
 	<div class="row">
 		<?php echo $form->labelEx($model, 'book_id'); ?>
 		<?
@@ -81,6 +83,6 @@ if(!$model->isNewRecord || $books) {
 	<?php $this->endWidget(); ?>
 <?
 }else
-	echo '<h4>کتاب ای برای تبلیغ وجود ندارد.</h4>';
+	echo '<h4>کتابی برای تبلیغ وجود ندارد.</h4>';
 ?>
 </div><!-- form -->

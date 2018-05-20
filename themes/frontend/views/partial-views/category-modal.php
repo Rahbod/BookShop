@@ -12,7 +12,7 @@ $parentsID=array();
             </div>
             <div class="modal-body">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 cats-list">
-                    <ul class="nav nav-pills nav-stacked row">
+                    <ul class="nav nav-pills nav-stacked row nav-categories">
                         <?php $i=0;foreach($this->navbarCategories as $category):?>
                             <?php if(is_null($category->parent_id)):$parentsID['cat-'.$category->id]=$category->id;?>
                                 <li role="presentation"<?php echo ($i==0)?' class="active"':'';?>><a data-toggle="tab" href="#cat-<?php echo $category->id;?>"><?php echo CHtml::encode($category->title)?></a></li>
