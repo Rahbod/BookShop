@@ -19,11 +19,9 @@
         )
     )); ?>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'mobile'); ?>
-        <?php echo $form->textField($model,'mobile'); ?>
-        <?php echo $form->error($model,'mobile'); ?>
-    </div>
+    <?php
+    echo $form->errorSummary($model)
+    ?>
 
     <div class="row">
         <?php echo $form->labelEx($model,'mobile'); ?>

@@ -21,9 +21,9 @@ $('#package-info-form #sale_printed').on('change', function(){
                 'id' => 'uploaderFile',
                 'name' => 'tempFile',
                 'maxFileSize' => 1024,
-                'maxFiles' => false,
+                'maxFiles' => 1,
                 'url' => Yii::app()->createUrl('/manageBooks/baseManage/uploadFile'),
-                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadPdfFile'),
+                'deleteUrl' => Yii::app()->createUrl('/manageBooks/baseManage/deleteUploadedFile'),
                 'acceptedFiles' => '.pdf, .epub',
                 'serverFiles' => array(),
                 'onSuccess' => '
@@ -138,8 +138,7 @@ $('#package-info-form #sale_printed').on('change', function(){
                     if(data.status){
                         $.fn.yiiGridView.update('packages-grid');
                         $('.uploader-message').text('');
-                        $('.dz-preview').remove();
-                        $('.dropzone').removeClass('dz-started');
+                        $('.dropzone#uploaderFile').removeClass('dz-started');
                         $('#package-info-form #version').val('');
                         $('#package-info-form #package_name').val('');
                         $('#package-info-form #isbn').val('');

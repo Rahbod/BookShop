@@ -72,12 +72,15 @@ if($role == 2){
         )
     );
     $columns = array(
-        'email',
         array(
             'header' => 'نام کامل',
-            'value' => '$data->userDetails->fa_name',
-            'filter' => CHtml::activeTextField($model, 'fa_name')
+            'value' => function($data){
+                return $data->userDetails->fa_name."<br><small>$data->email</small>";
+            },
+            'filter' => CHtml::activeTextField($model, 'fa_name'),
+            'type' => 'raw'
         ),
+        'mobile',
         array(
             'header' => 'وضعیت',
             'value' => '$data->statusLabels[$data->status]',

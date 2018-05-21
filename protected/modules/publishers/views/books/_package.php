@@ -52,7 +52,7 @@
                                         'id' => 'uploaderFile',
                                         'name' => 'tempFile',
                                         'maxFileSize' => 1024,
-                                        'maxFiles' => false,
+                                        'maxFiles' => 1,
                                         'url' => Yii::app()->createUrl('/publishers/books/uploadFile'),
                                         'deleteUrl' => Yii::app()->createUrl('/publishers/books/deleteUploadedFile'),
                                         'acceptedFiles' => '.pdf, .epub',

@@ -12,7 +12,7 @@ $this->breadcrumbs=array(
 <div class="clearfix"></div>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'books-grid',
-	'dataProvider'=>$model->search(),
+	'dataProvider'=>$model->searchAdmin(),
 	'filter'=>$model,
 	'itemsCssClass'=>'table',
 	'columns'=>array(

@@ -419,17 +419,15 @@ class ManageBooksBaseManageController extends Controller
     {
         $model = BookPackages::model()->findByPk($id);
         $uploadDir = Yii::getPathOfAlias("webroot") . '/uploads/books/files';
-        if(is_file($uploadDir . '/' . $model->pdf_file_name)){
+        if (is_file($uploadDir . '/' . $model->pdf_file_name))
             @unlink($uploadDir . '/' . $model->pdf_file_name);
-            if(is_file($uploadDir . '/' . $model->epub_file_name)){
-                @unlink($uploadDir . '/' . $model->epub_file_name);
-                if($model->delete())
-                    $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
-            }
-        }
+        elseif (is_file($uploadDir . '/' . $model->epub_file_name))
+            @unlink($uploadDir . '/' . $model->epub_file_name);
+        if ($model->delete())
+            $this->createLog('چاپ ' . $model->package_name . ' توسط مدیر سیستم حذف شد.', $model->book->publisher_id);
 
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:array('admin'));
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
 
     /**
@@ -465,17 +463,17 @@ class ManageBooksBaseManageController extends Controller
 
                 if (isset($_POST['tempFile'])) {
                     if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['pdf_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->pdf_file_name);
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . '/' . $model->pdf_file_name);
                     else if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
-                        @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['epub_file_name'], $uploadDir . DIRECTORY_SEPARATOR . $model->epub_file_name);
+                        @rename($tempDir . DIRECTORY_SEPARATOR . $_POST['tempFile'], $uploadDir . '/' . $model->epub_file_name);
                 }
             } else {
                 $response = ['status' => false, 'message' => $this->implodeErrors($model)];
                 if (isset($_POST['tempFile'])) {
                     if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'pdf')
-                        @unlink($tempDir . '/' . $_POST['pdf_file_name']);
+                        @unlink($tempDir . '/' . $_POST['tempFile']);
                     else if (pathinfo($_POST['tempFile'], PATHINFO_EXTENSION) == 'epub')
-                        @unlink($tempDir . '/' . $_POST['epub_file_name']);
+                        @unlink($tempDir . '/' . $_POST['tempFile']);
                 }
             }
 

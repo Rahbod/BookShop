@@ -109,11 +109,11 @@
                             $(".userinfo").addClass("uploading");
                         ',
                         'onSuccess' => '
+                            location.reload();
                             var responseObj = JSON.parse(res);
                             if(responseObj.status){
                                 {serverName} = responseObj.fileName;
-                                alert("آواتار با موفقیت ویرایش شد.");
-                                location.reload();
+                                alert("آواتار با موفقیت ویرایش شد.");                               
                             }
                             else{
                                 alert(responseObj.message);

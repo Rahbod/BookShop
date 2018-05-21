@@ -255,6 +255,7 @@ class BookCategories extends CActiveRecord
         $criteria->addCondition('t.image IS NOT NULL');
         $criteria->addCondition('t.icon IS NOT NULL');
         $criteria->addCondition('t.parent_id IS NULL');
+        $criteria->order = 't.title';
         return $criteria;
     }
 

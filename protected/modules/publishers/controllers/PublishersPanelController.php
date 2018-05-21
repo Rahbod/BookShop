@@ -694,6 +694,17 @@ class PublishersPanelController extends Controller
         else
             $this->performAjaxValidation($model->userDetails);
 
+        if(isset($_POST['Users'])) {
+            unset($_POST['Users']['password']);
+            $model->scenario = 'edit';
+            $model->attributes = $_POST['Users'];
+            if ($model->save()) {
+                Yii::app()->user->setFlash('success', 'اطلاعات با موفقیت ثبت شد.');
+                $this->refresh();
+            } else
+                Yii::app()->user->setFlash('failed', 'در ثبت اطلاعات خطایی رخ داده است! لطفا مجددا تلاش کنید.');
+        }
+
         // Save publisher profile
         if (isset($_POST['UserDetails'])) {
             $model->userDetails->attributes = $_POST['UserDetails'];

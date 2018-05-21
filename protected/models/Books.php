@@ -210,12 +210,12 @@ class Books extends CActiveRecord
 
         $criteria->addCondition('deleted=0');
         $criteria->addCondition('t.title != ""');
-        if ($this->showEncrypted) {
-            $criteria->addCondition('packages.encrypted = :encrypted');
-            $criteria->params[':encrypted'] = 1;
-            $criteria->with[] = 'packages';
-            $criteria->together = true;
-        }
+//        if ($this->showEncrypted) {
+//            $criteria->addCondition('packages.encrypted = :encrypted');
+//            $criteria->params[':encrypted'] = 1;
+//            $criteria->with[] = 'packages';
+//            $criteria->together = true;
+//        }
         $criteria->order = 't.id DESC';
 
         if ($returnType == 'dataProvider')
@@ -225,6 +225,38 @@ class Books extends CActiveRecord
             ));
         elseif ($returnType == 'criteria')
             return $criteria;
+    }
+
+
+    public function searchAdmin()
+    {
+        // @todo Please modify the following code to remove attributes that should not be searched.
+
+        $criteria = new CDbCriteria;
+        $criteria->compare('publisher_id', $this->publisher_id);
+        $criteria->compare('t.title', $this->title, true);
+        $criteria->compare('category_id', $this->category_id);
+        $criteria->compare('t.status', $this->status);
+
+        if ($this->devFilter) {
+            $criteria->with[] = 'publisher';
+            $criteria->with[] = 'publisher.userDetails';
+            $criteria->addCondition('publisher_name Like :dev_filter OR  userDetails.fa_name Like :dev_filter OR userDetails.en_name Like :dev_filter OR userDetails.publisher_id Like :dev_filter');
+            $criteria->params[':dev_filter'] = '%' . $this->devFilter . '%';
+        }
+
+//        if ($this->showEncrypted) {
+//            $criteria->addCondition('packages.encrypted = :encrypted');
+//            $criteria->params[':encrypted'] = 1;
+//            $criteria->with[] = 'packages';
+//            $criteria->together = true;
+//        }
+        $criteria->order = 't.id DESC';
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 20)
+        ));
     }
 
     public function publisherBooks($publisher_id = false)

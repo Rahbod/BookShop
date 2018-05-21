@@ -63,7 +63,10 @@ class SiteController extends Controller
         Yii::app()->theme = 'frontend';
         $this->layout = '//layouts/index';
         $activeRows = array();
-        $categoriesDP = new CActiveDataProvider('BookCategories', array('criteria' => BookCategories::model()->getValidCategories()));
+        $categoriesDP = new CActiveDataProvider('BookCategories', array(
+            'criteria' => BookCategories::model()->getValidCategories(),
+            'pagination' => false
+        ));
         // get suggested list
         $suggestedDP = null;
         $model = RowsHomepage::model()->findByAttributes(array('query' => 'suggested'));
